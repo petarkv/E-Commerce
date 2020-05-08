@@ -47,6 +47,28 @@ Route::get('/product/{id}','ProductController@getProductDetails');
 Route::get('/get-product-price','ProductController@getProductPrice');
 //Route::get('/products/{id}/size/{size}/price','ProductController@getProductPrice');
 
+# USER LOGIN/REGISTER PAGE
+#Route::get('/login-register', 'UsersController@userLoginRegister');
+
+# USERS REGISTER FORM SUBMIT
+#Route::post('/user-register','UserController@register');
+
+# REGISTER / LOGIN USER
+Route::get('/login-register', 'UsersController@getLoginRegister');
+
+# USER REGISTER
+Route::post('/user-register', 'UsersController@postUserRegister');
+
+# USER LOGIN
+Route::post('/user-login', 'UsersController@postUserLogin');
+
+# CHECK IF USER ALREADY EXISTS
+Route::match(['get','post'],'/check-email','UsersController@checkEmail');
+Route::match(['get','post'],'/check-username','UsersController@checkUsername');
+
+# LOGOUT
+Route::get('user-logout','UsersController@logout');
+
 #MIDDLEWARE LOGIN PROTECTION
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/admin/dashboard', 'AdminController@getDashboard');

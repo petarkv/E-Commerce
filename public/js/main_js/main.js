@@ -103,3 +103,104 @@ $('.toggle').on('click', function() {
 		api2._init();
 	}
 });
+
+
+// LOGIN / REGISTER USERS
+$().ready(function(){
+	// VALIDATE REGISTER FORM
+	$("#userRegisterForm").validate({
+		rules:{
+			name:{
+				required:true,
+				minlength:2,
+				accept: "[a-zA-Z]+"
+			},
+			surname:{
+				required:true,
+				minlength:2,
+				accept: "[a-zA-Z]+"
+			},
+			username:{
+				required:true,
+				minlength:2,
+				remote:"/check-username"			
+			},
+			password:{
+				required:true,
+				minlength:6
+			},
+			repassword:{
+				required:true,
+				minlength:6,
+				equalTo:"#myPassword"
+			},
+			email:{
+				required:true,
+				email:true,
+				remote:"/check-email"
+			}			
+		},
+		messages:{
+			name:{
+				required: "Please enter Your Name",
+				minlength:"Your Name must be atleast 2 characters long",
+				accept:"Your Name must contain letters"
+			},
+			surname:{
+				required: "Please enter Your Surname",
+				minlength:"Your Surname must be atleast 2 characters long",
+				accept:"Your Surname must contain letters"
+			},
+			username:{
+				required: "Please enter Your Username",
+				minlength:"Your Username must be atleast 2 characters long",
+				remote:"Username already exists!"				
+			},			
+			password:{
+				required:"Please provide Your Password",
+				minlength:"Your Password must be atleast 6 characters long"
+			},
+			repassword:{
+				required:"Please provide Your Password",
+				minlength:"Your Password must be atleast 6 characters long",
+				equalTo:"RePassword is not equal as Password"
+			},
+			email:{
+				required:"Please enter Your Email",
+				email:"Please enter valid Email",
+				remote:"Email already exists!"
+			}
+		},
+		
+	});
+
+	// VALIDATE LOGIN FORM
+	$("#loginForm").validate({
+		rules:{
+			email:{
+				required:true,
+				email:true
+			},			
+			password:{
+				required:true
+			}				
+		},
+		messages:{
+			email:{
+				required:"Please enter Your Email",
+				email:"Please enter valid Email"
+			},			
+			password:{
+				required:"Please provide Your Password"				
+			}	
+		},
+		
+	}); 
+
+	// PASSWORD STRENGTH SCRIPT
+	$('#myPassword').passtrength({
+		minChars: 6,
+		passwordToggle: true,
+		tooltip: true,		
+		eyeImg : "/images/main_images/eye.svg"
+	  });	
