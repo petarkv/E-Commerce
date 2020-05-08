@@ -12,8 +12,6 @@ class UsersController extends Controller
         return \view('users.login_register');
     }*/
 
-
-
     public function getLoginRegister(){
         return \view('users.login_register');
     }

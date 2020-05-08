@@ -153,6 +153,7 @@
       });
     }
   }
+  
 
   $.fn[pluginName] = function(options) {
       return this.each(function() {

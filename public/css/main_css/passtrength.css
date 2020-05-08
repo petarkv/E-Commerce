@@ -109,6 +109,7 @@
 .passtrengthMeter.weak .tooltip{
   background-color: #EC644B;
 }
+
 .passtrengthMeter.weak .tooltip:after{
   border-left: solid transparent 7px;
   border-right: solid transparent 7px;

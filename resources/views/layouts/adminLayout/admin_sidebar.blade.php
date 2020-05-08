@@ -5,6 +5,7 @@
       <li <?php if (preg_match("/dashboard/i", $url)) { ?> class="active" <?php } ?>>
       <a href="{{ url('/admin/dashboard') }}"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
 
+      
       <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Categories</span> <span class="label label-important">2</span></a>
         <ul <?php if (preg_match("/categor/i", $url)) { ?> style="display: block;" <?php } ?>>
           <li <?php if (preg_match("/add-category/i", $url)) { ?> class="active" <?php } ?>>

@@ -105,6 +105,7 @@ $('.toggle').on('click', function() {
 });
 
 
+
 // LOGIN / REGISTER USERS
 $().ready(function(){
 	// VALIDATE REGISTER FORM

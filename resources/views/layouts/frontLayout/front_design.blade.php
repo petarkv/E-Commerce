@@ -40,9 +40,7 @@
 	@yield('content')
 	
 	@include('layouts.frontLayout.front_footer')
-	
 
-  
     <script src="{{ asset('js/main_js/jquery.js') }}"></script>
 	<script src="{{ asset('js/main_js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('js/main_js/jquery.scrollUp.min.js') }}"></script>

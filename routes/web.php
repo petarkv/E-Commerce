@@ -69,6 +69,7 @@ Route::match(['get','post'],'/check-username','UsersController@checkUsername');
 # LOGOUT
 Route::get('user-logout','UsersController@logout');
 
+
 #MIDDLEWARE LOGIN PROTECTION
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/admin/dashboard', 'AdminController@getDashboard');

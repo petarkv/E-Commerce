@@ -61,6 +61,7 @@ $mainCategories = Controller::mainCategories();
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
