@@ -43,6 +43,9 @@ Route::get('/products/{url}','ProductController@products');
 # PRODUCT DETAIL PAGE
 Route::get('/product/{id}','ProductController@getProductDetails'); 
 
+# ADD TO CART ROUTE
+Route::match(['get','post'],'/add-cart','ProductController@addtocart');
+
 # GET PRODUCT ATTRIBUTE PRICE
 Route::get('/get-product-price','ProductController@getProductPrice');
 //Route::get('/products/{id}/size/{size}/price','ProductController@getProductPrice');

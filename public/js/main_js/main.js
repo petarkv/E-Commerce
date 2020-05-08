@@ -47,6 +47,7 @@ $(document).ready(function(){
 
 				//$("#getPrice").html("EUR"+resp);
 				$("#getPrice").html("EUR"+arr[0]);
+				$("#price").val(arr[0]);
 				if(arr[1]==0){
 					$("#cartButton").hide();
 					$("#Availability").text("Out of Stock");
@@ -204,4 +205,5 @@ $().ready(function(){
 		passwordToggle: true,
 		tooltip: true,		
 		eyeImg : "/images/main_images/eye.svg"
-	  });	
+	  });
+});	
