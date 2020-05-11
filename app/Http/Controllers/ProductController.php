@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Str;
 use Auth;
 use Session;
 use Image;
@@ -431,8 +432,14 @@ class ProductController extends Controller
             $data['user_email'] = '';
         }
 
-        if (empty($data['session_id'])) {
+        /*if (empty($data['session_id'])) {
             $data['session_id'] = '';
+        }*/
+
+        $session_id = Session::get('session_id');
+        if(empty($session_id)){
+            $session_id = Str::random(40);
+        Session::put('session_id',$session_id);
         }
 
         $sizeArr = explode("-",$data['size']);
@@ -445,7 +452,14 @@ class ProductController extends Controller
                                     'size'=>$sizeArr[1],
                                     'quantity'=>$data['quantity'],
                                     'user_email'=>$data['user_email'],
-                                    'session_id'=>$data['session_id']]);
-        die;  
+                                    'session_id'=>$session_id]);
+        return \redirect('cart')->with('flash_message_success','Product has been added in Cart!'); 
+    }
+
+    public function cart(){
+        $session_id = Session::get('session_id');
+        $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+        //echo "<pre>"; print_r($userCart); die;
+        return \view('products.cart')->with(\compact('userCart'));
     }
 }
