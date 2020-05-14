@@ -27,7 +27,8 @@
                 </div>
             @endif
         <form id="loginform" class="form-vertical" method="POST" action="{{ url('admin') }}">{{ csrf_field() }}
-				 <div class="control-group normal_text"> <h3><img src="{{ asset('images/template_images/logo.png') }}" alt="Logo" /></h3></div>
+                 <div class="control-group normal_text"> <h3><img src="{{ asset('images/template_images/my_logo.jpg') }}" alt="Logo" /></h3></div>
+                 <div class="control-group normal_text">ADMIN PANEL</div>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
