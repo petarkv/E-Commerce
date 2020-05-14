@@ -25,9 +25,11 @@
       </li> 
 
       <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Coupons</span> <span class="label label-important">2</span></a>
-        <ul>
-          <li><a href="{{ url('/admin/add-coupon') }}">Add Coupon</a></li>
-          <li><a href="{{ url('/admin/view-coupons') }}">View Coupons</a></li>          
+        <ul <?php if (preg_match("/coupon/i", $url)) { ?> style="display: block;" <?php } ?>>
+          <li <?php if (preg_match("/add-coupon/i", $url)) { ?> class="active" <?php } ?>>
+            <a href="{{ url('/admin/add-coupon') }}">Add Coupon</a></li>
+          <li <?php if (preg_match("/view-coupons/i", $url)) { ?> class="active" <?php } ?>>
+            <a href="{{ url('/admin/view-coupons') }}">View Coupons</a></li>          
         </ul>
       </li>
  

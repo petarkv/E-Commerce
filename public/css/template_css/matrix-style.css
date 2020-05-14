@@ -47,20 +47,20 @@ hr{ border-top-color:#dadada;}
 
 /* Header */
 #header {
-	height: 77px;
+	height: 105px;
 	position: relative;
 	width: 100%;
 	z-index: -9;
 }
 #header h1 {
-	background: url("/images/template_images/logo.png") no-repeat scroll 0 0 transparent;
-	height: 31px;
-	left: 20px;
+	background: url("/images/template_images/my_logo.jpg") no-repeat scroll 0 0 transparent;
+	height: 94px;
+	left: 10px;
 	line-height: 600px;
 	overflow: hidden;
 	position: relative;
-	top: 26px;
-	width: 191px;
+	top: 5px;
+	width: 200px;
 }
 #header h1 a {
 	display: block;
@@ -205,7 +205,7 @@ hr{ border-top-color:#dadada;}
 #content-header {
 	position: abslute;
 	width: 100%;
-	margin-top: -38px;
+	margin-top: -60px;
 	z-index: 20;
 }
 #content-header h1 {

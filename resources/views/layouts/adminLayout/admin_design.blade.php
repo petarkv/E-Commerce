@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Matrix Admin</title>
+<title>MyShop - Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="{{ asset('css/template_css/bootstrap.min.css') }}" />
@@ -19,6 +19,9 @@
 
 <!-- Sweet Alert -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" />
+
+<!-- Date Picker -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 <body>
@@ -80,7 +83,7 @@ function resetMenu() {
 </script>-->
 
 <script src="{{ asset('js/template_js/jquery.min.js') }}"></script> 
-<script src="{{ asset('js/template_js/jquery.ui.custom.js') }}"></script> 
+<!--<script src="{{ asset('js/template_js/jquery.ui.custom.js') }}"></script>--> 
 <script src="{{ asset('js/template_js/bootstrap.min.js') }}"></script> 
 <script src="{{ asset('js/template_js/jquery.uniform.js') }}"></script> 
 <script src="{{ asset('js/template_js/select2.min.js') }}"></script> 
@@ -98,6 +101,17 @@ function resetMenu() {
 <!-- Sweet Alert -->
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script--> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+<!-- Date Picker -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#expiry_date" ).datepicker({
+      minDate: 0,
+      dateFormat: 'yy-mm-dd'
+      });
+  } );
+  </script>
 
 </body>
 </html>
