@@ -49,6 +49,13 @@ Route::match(['get','post'],'/cart','ProductController@cart');
 # CART PAGE
 Route::match(['get','post'],'/add-cart','ProductController@addtocart');
 
+#DELETE PRODUCT FROM CART PAGE
+Route::get('/cart/delete-product/{id}','ProductController@deleteCartProduct');
+
+#UPDATE PRODUCT QUANTITY IN CART
+Route::get('/cart/update-quantity/{id}/{quantity}','ProductController@updateCartQuantity');
+
+
 # GET PRODUCT ATTRIBUTE PRICE
 Route::get('/get-product-price','ProductController@getProductPrice');
 //Route::get('/products/{id}/size/{size}/price','ProductController@getProductPrice');
