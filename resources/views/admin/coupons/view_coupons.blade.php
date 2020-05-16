@@ -66,8 +66,9 @@
                         <td class="center">                            
                             <a href="{{ url('/admin/edit-coupon/'.$coupon->id) }}" 
                                 class="btn btn-primary btn-mini" title="Edit Coupon">Edit</a>                                                                      
-                            <a rel="{{ $coupon->id }}" rel1="delete-coupon" 
-                              href="javascript:" class="btn btn-danger btn-mini deleteRecord" title="Delete Coupon">Delete</a></td>
+                            <a onclick="return delCoupon();"  href="{{ url('/admin/delete-coupon/'.$coupon->id) }}" <?php /* rel="{{ $coupon->id }}" rel1="delete-coupon" 
+                              href="javascript:" */ ?> class="btn btn-danger btn-mini <?php /* deleteRecord */ ?>"  
+                              title="Delete Coupon">Delete</a></td>
                         </tr>                      
 
                     @endforeach
@@ -81,4 +82,13 @@
     </div>
   </div>
 
+
+  <script>
+    function delCoupon(){
+		if(confirm('Are You sure you want to delete this Coupon?')){
+			return true;
+		}
+		return false;
+  }
+</script>
 @endsection

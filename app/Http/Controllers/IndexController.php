@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
+use App\Banner;
 
 class IndexController extends Controller
 {
@@ -41,7 +42,10 @@ class IndexController extends Controller
                                 </div>
                             </div>";            
         }*/
+
+        $banners = Banner::where('status','1')->get();
+
         //return view('index')->with(\compact('productsAll','categories_menu')); 
-        return view('index')->with(\compact('productsAll','categories'));       
+        return view('index')->with(\compact('productsAll','categories','banners'));       
     }
 }

@@ -128,11 +128,11 @@ a#scrollUp i{
 	background:#FF4518;
 }
 
-.fa-dribbble:hover  {
+.fa-instagram:hover  {
 	background:#90C9DC;
 }
 
-.fa-google-plus:hover  {
+.fa-youtube:hover  {
 	background:#CE3C2D;
 }
 
@@ -156,8 +156,8 @@ a#scrollUp i{
   border-radius: 0;
   color: #B4B1AB;
   font-size: 12px;
-  margin-right: 20px;
-  padding: 2px 15px;
+  margin-right: 10px;  
+  padding: 2px 5px;
   margin-top: 10px;
 }
 
@@ -581,7 +581,7 @@ ul.sub-menu {
 }
 
 .item {
-  padding-left: 100px;
+  padding-left: 0;
 }
 
 

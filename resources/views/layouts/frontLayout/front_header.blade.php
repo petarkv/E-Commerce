@@ -10,19 +10,19 @@ $mainCategories = Controller::mainCategories();
                 <div class="col-sm-6">
                     <div class="contactinfo">
                         <ul class="nav nav-pills">
-                            <li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                            <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                            <li><a href="#"><i class="fa fa-phone"></i> +381 64 01 88 821</a></li>
+                            <li><a href="#"><i class="fa fa-envelope"></i> info@myshop.com</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="social-icons pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-facebook" title="Facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter" title="Twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin" title="LinkedIn"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram" title="Instagram"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube" title="YouTube"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -35,7 +35,7 @@ $mainCategories = Controller::mainCategories();
             <div class="row">
                 <div class="col-sm-4">
                     <div class="logo pull-left">
-                        <a href="index.html"><img src="{{ asset('images/main_images/home/logo.png') }}" alt="" /></a>
+                        <a href="index.html"><img src="{{ asset('images/main_images/myshop_logo.png') }}" alt="" /></a>
                     </div>
                     <div class="btn-group pull-right">
                         <div class="btn-group">

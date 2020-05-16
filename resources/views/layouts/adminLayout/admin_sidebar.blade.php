@@ -32,6 +32,15 @@
             <a href="{{ url('/admin/view-coupons') }}">View Coupons</a></li>          
         </ul>
       </li>
+
+      <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Banners</span> <span class="label label-important">2</span></a>
+        <ul <?php if (preg_match("/banner/i", $url)) { ?> style="display: block;" <?php } ?>>
+          <li <?php if (preg_match("/add-banner/i", $url)) { ?> class="active" <?php } ?>>
+            <a href="{{ url('/admin/add-banner') }}">Add Banner</a></li>
+          <li <?php if (preg_match("/view-banners/i", $url)) { ?> class="active" <?php } ?>>
+            <a href="{{ url('/admin/view-banners') }}">View Banners</a></li>          
+        </ul>
+      </li>
  
     </ul>
   </div>
