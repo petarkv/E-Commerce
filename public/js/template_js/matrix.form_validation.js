@@ -255,6 +255,13 @@ $(document).ready(function(){
 		}
 		return false;
 	});*/
+
+	/*function delCoupon(){
+		if(confirm('Are You sure you want to delete this Coupon?')){
+			return true;
+		}
+		return false;
+	}*/
 	
 
 	$(".deleteRecord").click(function(){

@@ -60,6 +60,9 @@ Route::get('/cart/update-quantity/{id}/{quantity}','ProductController@updateCart
 Route::get('/get-product-price','ProductController@getProductPrice');
 //Route::get('/products/{id}/size/{size}/price','ProductController@getProductPrice');
 
+#APPLY COUPON
+Route::post('/cart/apply-coupon','ProductController@applyCoupon');
+
 # USER LOGIN/REGISTER PAGE
 #Route::get('/login-register', 'UsersController@userLoginRegister');
 
@@ -131,7 +134,18 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/admin/delete-attribute/{id}', 'ProductController@deleteAttribute');
 
     #COUPON ROUTES
-    Route::match(['get','post'],'admin/add-coupon','CouponsController@addCoupon');
+    Route::match(['get','post'],'/admin/add-coupon','CouponsController@addCoupon');
     Route::get('/admin/view-coupons', 'CouponsController@viewCoupons');
+
+    Route::get('/admin/delete-coupon/{id}', 'CouponsController@deleteCoupon');
+
+    #EDIT COUPONS
+    Route::match(['get','post'],'/admin/edit-coupon/{id}','CouponsController@editCoupon');
+
+    #BANNERS ADMIN
+    Route::match(['get','post'],'/admin/add-banner','BannersController@addBanner');
+    Route::get('/admin/view-banners', 'BannersController@viewBanners');
+    Route::match(['get','post'],'/admin/edit-banner/{id}','BannersController@editBanner');
+    Route::get('/admin/delete-banner/{id}', 'BannersController@deleteBanner');
 
 });

@@ -13,6 +13,8 @@ use App\Category;
 use App\Product;
 use App\ProductsAttribute;
 use App\ProductsImage;
+use App\Coupon;
+use App\Banner;
 
 
 class ProductController extends Controller
@@ -369,8 +371,10 @@ class ProductController extends Controller
         }else{
             $productsAll = Product::where(['category_id' => $categoryDetails->id])->where('status',1)->get();
         }
+
+        $banners = Banner::where('status','1')->get();
         
-        return view('products.listing')->with(\compact('categories','categoryDetails','productsAll'));
+        return view('products.listing')->with(\compact('categories','categoryDetails','productsAll','banners'));
     }
 
 
@@ -425,6 +429,10 @@ class ProductController extends Controller
     } 
     
     public function addtocart(Request $request){
+
+        Session::forget('couponAmount');
+        Session::forget('couponCode');
+
         $data = $request->all();
         //echo "<pre>"; print_r($data); die;
 
@@ -485,12 +493,20 @@ class ProductController extends Controller
     }
 
     public function deleteCartProduct($id=null){
+
+        Session::forget('couponAmount');
+        Session::forget('couponCode');
+
         //echo $id; die;
         DB::table('cart')->where('id',$id)->delete();
         return \redirect('cart')->with('flash_message_success','Product has been deleted from Cart!');
     }
 
     public function updateCartQuantity($id=null,$quantity=null){
+
+        Session::forget('couponAmount');
+        Session::forget('couponCode');
+
         $getCartDetails = DB::table('cart')->where('id',$id)->first();
         $getAttributeStock = ProductsAttribute::where('sku',$getCartDetails->product_code)->first();        
         $updated_quantity = $getCartDetails->quantity+$quantity;
@@ -502,5 +518,54 @@ class ProductController extends Controller
         }
 
         
+    }
+
+    public function applyCoupon(Request $request){
+
+        Session::forget('couponAmount');
+        Session::forget('couponCode');
+
+        $data = $request->all();
+        //echo "<pre>"; print_r($data); die;
+        $couponCount = Coupon::where('coupon_code',$data['coupon_code'])->count();
+        if ($couponCount==0) {
+            return \redirect()->back()->with('flash_message_error','This Coupon does not exists');
+        }else{
+            $couponDetails = Coupon::where('coupon_code',$data['coupon_code'])->first();
+
+            // If coupon is inactive
+            if ($couponDetails->status==0) {
+                return \redirect()->back()->with('flash_message_error','This Coupon is not active!');
+            }
+
+            // If coupon is expired
+            $expiry_date = $couponDetails->expiry_date;
+            $current_date = date('Y-m-d');
+            if ($expiry_date < $current_date) {
+                return \redirect()->back()->with('flash_message_error','This Coupon is expired!');
+            }
+
+            // Get Cart Total Amount
+            $session_id = Session::get('session_id');
+            $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+            $total_amount = 0;
+            foreach ($userCart as $item) {
+                $total_amount = $total_amount + ($item->price * $item->quantity);
+            }
+            
+            // Check if amount type is Fixed or Percentage
+            if ($couponDetails->amount_type=="Fixed") {
+                $couponAmount = $couponDetails->amount;
+            }else{
+                $couponAmount = $total_amount * ($couponDetails->amount/100);
+            }
+            //echo $couponAmount; die;
+
+            // Add Coupon Code & Amount in Session
+            Session::put('couponAmount',$couponAmount);
+            Session::put('couponCode',$data['coupon_code']);
+
+            return \redirect()->back()->with('flash_message_success','Coupon Code Successfully applied. You are availing discount!');
+        }
     }
 }
