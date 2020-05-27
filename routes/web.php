@@ -82,6 +82,21 @@ Route::post('/user-login', 'UsersController@postUserLogin');
 Route::match(['get','post'],'/check-email','UsersController@checkEmail');
 Route::match(['get','post'],'/check-username','UsersController@checkUsername');
 
+Route::match(['get','post'],'/check-username-update','UsersController@checkUsernameUpdate');
+
+#MIDDLEWARE LOGIN USER PROTECTION
+Route::group(['middleware'=>['frontlogin']],function(){
+    # USERS ACCOUNT PAGE
+    Route::match(['get','post'],'/account','UsersController@account');
+    # CHECK USER CURRENT PASSWORD
+    Route::post('/check-user-pwd', 'UsersController@checkUserPassword');
+    # UPDATE USER PASSWORD
+    Route::post('/update-user-pwd', 'UsersController@updateUserPassword');
+    # CHECKOUT PAGE
+    Route::match(['get','post'],'/checkout','ProductController@checkout');
+});
+
+
 # LOGOUT
 Route::get('user-logout','UsersController@logout');
 

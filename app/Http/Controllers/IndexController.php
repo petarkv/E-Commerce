@@ -13,6 +13,7 @@ class IndexController extends Controller
         //$productsAll = Product::orderBy('id','DESC')->take(3)->get();
         $productsAll = Product::orderBy('id','DESC')->get();
 
+        //\dump($productsAll);
         // Get All Categories and Sub Categories
         $categories = Category::with('categories')->where(['parent_id'=>0])->get();
         //$categories = \json_decode(\json_encode($categories));

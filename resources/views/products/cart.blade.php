@@ -5,7 +5,7 @@
     <div class="container">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
-              <li><a href="#">Home</a></li>
+              <li><a href="{{ url('/') }}">Home</a></li>
               <li class="active">Shopping Cart</li>
             </ol>
         </div>
@@ -111,7 +111,7 @@
                         @endif
                     </ul>
                         <a class="btn btn-default update" href="">Update</a>
-                        <a class="btn btn-default check_out" href="">Check Out</a>
+                        <a class="btn btn-default check_out" href="{{ url('/checkout') }}">Check Out</a>
                 </div>
             </div>
         </div>

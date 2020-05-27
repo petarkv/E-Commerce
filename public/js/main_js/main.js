@@ -109,6 +109,7 @@ $('.toggle').on('click', function() {
 
 // LOGIN / REGISTER USERS
 $().ready(function(){
+
 	// VALIDATE REGISTER FORM
 	$("#userRegisterForm").validate({
 		rules:{
@@ -207,3 +208,153 @@ $().ready(function(){
 		eyeImg : "/images/main_images/eye.svg"
 	  });
 });	
+
+
+	// UPDATE USER ACCOUNT
+$().ready(function(){
+		// USER ACCOUNT UPDATE		
+		$("#accountForm").validate({
+			rules:{
+				name:{
+					required:true,
+					minlength:2,
+					accept: "[a-zA-Z]+"
+				},
+				surname:{
+					required:true,
+					minlength:2,
+					accept: "[a-zA-Z]+"
+				},
+				address:{
+					required:true,
+					minlength:6					
+				},
+				city:{
+					required:true,
+					minlength:2					
+				},
+				state:{
+					required:true,
+					minlength:2					
+				},
+				country:{
+					required:true								
+				},
+				
+						
+			},
+			messages:{
+				name:{
+					required: "Please enter Your Name",
+					minlength:"Your Name must be atleast 2 characters long",
+					accept:"Your Name must contain letters"
+				},
+				surname:{
+					required: "Please enter Your Surname",
+					minlength:"Your Surname must be atleast 2 characters long",
+					accept:"Your Surname must contain letters"
+				},
+				address:{
+					required: "Please enter Your Address",
+					minlength:"Your Address must be atleast 6 characters long"									
+				},
+				city:{
+					required: "Please enter Your City",
+					minlength:"Your City must be atleast 2 characters long"									
+				},
+				state:{
+					required: "Please enter Your State",
+					minlength:"Your State must be atleast 2 characters long"									
+				},
+				country:{
+					required: "Please enter Your Country"											
+				},	
+
+			},
+			
+		});
+
+	// CHECK CURRENT USER PASSWORD
+	$("#current_password").keyup(function(){
+		var current_password = $(this).val();
+		//alert(current_password);
+		$.ajax({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			type:'post',
+			url:'/check-user-pwd',
+			data:{current_password:current_password},
+			success:function(resp) {
+				//alert(resp);
+				if (resp=="false") {
+					$("#chkPwd").html("<font color='red'>Current Password is incorrect</font>");
+				}else if(resp=='true'){
+					$("#chkPwd").html("<font color='green'>Current Password is correct</font>");
+				}
+			},error:function(){
+				alert("Error");
+			}
+		});
+	});
+
+	// VALIDATE NEW USER PASSWORD
+	$("#passwordForm").validate({
+		rules:{
+			current_password:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			new_password:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			confirm_password:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#new_password"
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+	
+
+	// COPY BILLING ADDRESS TO SHIPPING ADDRESS
+	$("#billtoship").on('click',function(){
+		if(this.checked){
+			$("#shipping_name").val($("#billing_name").val());
+			$("#shipping_surname").val($("#billing_surname").val());
+			$("#shipping_address").val($("#billing_address").val());
+			$("#shipping_city").val($("#billing_city").val());
+			$("#shipping_state").val($("#billing_state").val());
+			$("#shipping_country").val($("#billing_country").val());
+			$("#shipping_pincode").val($("#billing_pincode").val());
+			$("#shipping_mobile").val($("#billing_mobile").val());
+		}else{
+			$("#shipping_name").val('');
+			$("#shipping_surname").val('');
+			$("#shipping_address").val('');
+			$("#shipping_city").val('');
+			$("#shipping_state").val('');
+			$("#shipping_country").val('');
+			$("#shipping_pincode").val('');
+			$("#shipping_mobile").val('');
+		}
+	});
+
+
+});
+
+
+
