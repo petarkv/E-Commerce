@@ -94,6 +94,22 @@ Route::group(['middleware'=>['frontlogin']],function(){
     Route::post('/update-user-pwd', 'UsersController@updateUserPassword');
     # CHECKOUT PAGE
     Route::match(['get','post'],'/checkout','ProductController@checkout');
+    # ORDER REVIEW PAGE
+    Route::match(['get','post'],'/order-review','ProductController@orderReview');
+    # PLACE ORDER PAGE
+    Route::match(['get','post'],'/place-order','ProductController@placeOrder');
+    # THANKS PAGE
+    Route::get('/thanks', 'ProductController@thanks');
+    # USERS ORDERS PAGE
+    Route::get('/orders', 'ProductController@userOrders');
+    # USER ORDERED PRODUCTS PAGE
+    Route::get('/orders/{id}', 'ProductController@userOrderDetails');
+    # PAYPAL PAGE
+    Route::get('/paypal', 'ProductController@paypal');
+    # PAYPAL THANKS PAGE
+    Route::get('/paypal/thanks', 'ProductController@thanksPaypal');
+    # PAYPAL CANCEL PAGE
+    Route::get('/paypal/cancel', 'ProductController@cancelPaypal');
 });
 
 

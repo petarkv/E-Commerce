@@ -18,6 +18,8 @@ use App\Banner;
 use App\User;
 use App\Country;
 use App\DeliveryAddress;
+use App\Order;
+use App\OrdersProduct;
 
 
 class ProductController extends Controller
@@ -439,8 +441,10 @@ class ProductController extends Controller
         $data = $request->all();
         //echo "<pre>"; print_r($data); die;
 
-        if (empty($data['user_email'])) {
+        if (empty(Auth::user()->email)) {
             $data['user_email'] = '';
+        }else{
+            $data['user_email'] = Auth::user()->email;
         }
 
         /*if (empty($data['session_id'])) {
@@ -488,8 +492,15 @@ class ProductController extends Controller
     }
 
     public function cart(){
-        $session_id = Session::get('session_id'); 
-        $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+        
+        if(Auth::check()){
+            $user_email = Auth::user()->email;
+            $userCart = DB::table('cart')->where(['user_email'=>$user_email])->get();
+        }else{
+            $session_id = Session::get('session_id'); 
+            $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+        }
+        
         foreach ($userCart as $key => $product) {
             $productDetails = Product::where('id',$product->product_id)->first();
             $userCart[$key]->image = $productDetails->image;
@@ -553,7 +564,16 @@ class ProductController extends Controller
 
             // Get Cart Total Amount
             $session_id = Session::get('session_id');
-            $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+            //$userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+
+            if(Auth::check()){
+                $user_email = Auth::user()->email;
+                $userCart = DB::table('cart')->where(['user_email'=>$user_email])->get();
+            }else{
+                $session_id = Session::get('session_id'); 
+                $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
+            }
+
             $total_amount = 0;
             foreach ($userCart as $item) {
                 $total_amount = $total_amount + ($item->price * $item->quantity);
@@ -583,9 +603,14 @@ class ProductController extends Controller
 
         // Check if Shipping Address exists
         $shippingCount = DeliveryAddress::where('user_id',$user_id)->count();
+        $shippingDetails = array();
         if ($shippingCount>0) {
             $shippingDetails = DeliveryAddress::where('user_id',$user_id)->first();
         }
+
+        // Update cart table with user email
+        $session_id = Session::get('session_id');
+        DB::table('cart')->where(['session_id'=>$session_id])->update(['user_email'=>$user_email]);
 
         if($request->isMethod('post')){
             $data = $request->all();
@@ -644,11 +669,136 @@ class ProductController extends Controller
                 $shipping->pincode = $data['shipping_pincode'];
                 $shipping->mobile = $data['shipping_mobile'];
                 $shipping->save();
-            }                                   
-            echo "Redirect to Order Review Page"; die;
-            return \redirect()->action('ProductController@order_review');
+            }                                
+            return \redirect()->action('ProductController@orderReview');
         }
 
         return \view('products.checkout')->with(\compact('userDetails','countries','shippingDetails'));
+    }
+
+    public function orderReview(){
+        $user_id = Auth::user()->id;
+        $user_email = Auth::user()->email;
+        $userDetails = User::where('id',$user_id)->first();
+        $shippingDetails = DeliveryAddress::where('user_id',$user_id)->first();
+        $shippingDetails = \json_decode(\json_encode($shippingDetails));
+        //echo "<pre>"; print_r($shippingDetails); die;
+        $userCart = DB::table('cart')->where(['user_email'=>$user_email])->get();
+        foreach ($userCart as $key => $product) {
+            $productDetails = Product::where('id',$product->product_id)->first();
+            $userCart[$key]->image = $productDetails->image;
+        }
+        //echo "<pre>"; print_r($userCart); die;
+        return \view('products.order_review')->with(\compact('userDetails','shippingDetails','userCart'));
+    }
+
+    public function placeOrder(Request $request){     
+        if($request->isMethod('post')){
+            $data = $request->all();
+            $user_id = Auth::user()->id;
+            $user_email = Auth::user()->email;
+
+            // Get Shipping Address of User
+            $shippingDetails = DeliveryAddress::where(['user_email' => $user_email])->first();
+            //$shipping = \json_decode(json_encode($shipping));
+            //echo "<pre>"; print_r($shipping); die;
+
+            //echo "<pre>"; print_r($data); die;
+            if(empty(Session::get('couponCode'))){
+                $coupon_code = '';
+            }else{
+                $coupon_code = Session::get('couponCode');                
+            }
+
+            if(empty(Session::get('couponAmount'))){
+                $coupon_amount = '';
+            }else{
+                $coupon_amount = Session::get('couponAmount');
+            }
+            
+            $order = new Order;
+            $order->user_id = $user_id;
+            $order->user_email = $user_email;
+            $order->name = $shippingDetails->name;
+            $order->surname = $shippingDetails->surname;
+            $order->address = $shippingDetails->address;
+            $order->city = $shippingDetails->city;
+            $order->state = $shippingDetails->state;
+            $order->pincode = $shippingDetails->pincode;
+            $order->country = $shippingDetails->country;
+            $order->mobile = $shippingDetails->mobile;
+            $order->coupon_code = $coupon_code;
+            $order->coupon_amount = $coupon_amount;
+            $order->order_status = "New";
+            $order->payment_method = $data['payment_method'];
+            $order->grand_total = $data['grand_total'];
+            $order->save();
+
+            $order_id = DB::getPdo()->lastInsertId();
+
+            $cartProducts = DB::table('cart')->where(['user_email'=>$user_email])->get();
+            foreach ($cartProducts as $pro) {
+                $cartPro = new OrdersProduct;
+                $cartPro->order_id = $order_id;
+                $cartPro->user_id = $user_id;
+                $cartPro->product_id = $pro->product_id;
+                $cartPro->product_code = $pro->product_code;
+                $cartPro->product_name = $pro->product_name;
+                $cartPro->product_color = $pro->product_color;
+                $cartPro->product_size = $pro->size;
+                $cartPro->product_price = $pro->price;
+                $cartPro->product_quantity = $pro->quantity;
+                $cartPro->save();
+            }
+            Session::put('order_id',$order_id);
+            Session::put('grand_total',$data['grand_total']);
+            Session::put('payment_method',$data['payment_method']);
+
+            if($data['payment_method']=="COD"){
+                return \redirect('/thanks');
+            }else{
+                return \redirect('/paypal');
+            }
+            
+        }
+    }
+
+    public function thanks(Request $request){
+        Session::forget('couponAmount');
+        Session::forget('couponCode');
+
+        $user_email = Auth::user()->email;
+        DB::table('cart')->where('user_email',$user_email)->delete();
+        return \view('orders.thanks');
+    }
+
+    public function userOrders(){
+        $user_id = Auth::user()->id;
+        $orders = Order::with('orders')->where('user_id',$user_id)->orderBy('id','DESC')->get();
+        //$orders = \json_decode(\json_encode($orders));
+        //echo "<pre>"; print_r($orders); die;
+        return \view('orders.user_orders')->with(\compact('orders'));
+    }
+
+    public function userOrderDetails($order_id){
+        $user_id = Auth::user()->id;
+        $orderDetails = Order::with('orders')->where('id',$order_id)->first();
+        $orderDetails = \json_decode(\json_encode($orderDetails));
+        //echo "<pre>"; print_r($orderDetails); die;
+        return \view('orders.user_order_details')->with(compact('orderDetails'));
+    }
+
+    public function paypal(Request $request){        
+        $user_email = Auth::user()->email;
+        DB::table('cart')->where('user_email',$user_email)->delete();
+        return \view('orders.paypal');
+    }
+
+    public function thanksPaypal(Request $request){
+        return \view('orders.thanks_paypal');
+    }
+
+    public function cancelPaypal(){
+        return \view('orders.cancel_paypal');
     }
 }
