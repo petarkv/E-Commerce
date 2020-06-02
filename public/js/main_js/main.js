@@ -356,5 +356,15 @@ $().ready(function(){
 
 });
 
-
+// SELECT PAYMENT METHOD ORDER REVIEW PAGE
+function selectPaymentMethod() {
+	//alert("Kupi");
+	if($("#Paypal").is(':checked') || $("#COD").is(':checked')){
+		//alert("checked");
+	}else{
+		alert("Please select Payment Method");
+		return false;
+	}
+	
+}
 
