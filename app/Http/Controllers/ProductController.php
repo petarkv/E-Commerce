@@ -788,6 +788,33 @@ class ProductController extends Controller
         return \view('orders.user_order_details')->with(compact('orderDetails'));
     }
 
+    public function viewOrders(){
+        $orders = Order::with('orders')->orderBy('id','Desc')->get();
+        $orders = \json_decode(\json_encode($orders));
+        //echo "<pre>"; print_r($orders); die;
+        return view('admin.orders.view_orders')->with(\compact('orders'));
+    }
+
+    public function viewOrderDetails($order_id){
+        $orderDetails = Order::with('orders')->where('id',$order_id)->first();
+        $orderDetails = \json_decode(\json_encode($orderDetails));
+        //echo "<pre>"; print_r($orderDetails); die;
+        $user_id = $orderDetails->user_id;
+        $userDetails = User::where('id',$user_id)->first();
+        //$userDetails = \json_decode(\json_encode($userDetails));
+        //echo "<pre>"; print_r($userDetails); die;
+        return \view('admin.orders.order_details')->with(\compact('orderDetails','userDetails'));
+    }
+
+    public function updateOrderStatus(Request $request){
+        if($request->isMethod('post')){
+            $data = $request->all();
+            //echo "<pre>"; print_r($data); die;
+            Order::where('id',$data['order_id'])->update(['order_status'=>$data['order_status']]);
+            return \redirect()->back()->with('flash_message_success','Order Status has been updated Successfully.');
+        }
+    }
+
     public function paypal(Request $request){        
         $user_email = Auth::user()->email;
         DB::table('cart')->where('user_email',$user_email)->delete();

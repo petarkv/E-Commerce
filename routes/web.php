@@ -117,8 +117,8 @@ Route::group(['middleware'=>['frontlogin']],function(){
 Route::get('user-logout','UsersController@logout');
 
 
-#MIDDLEWARE LOGIN PROTECTION
-Route::group(['middleware' => ['auth']], function(){
+#MIDDLEWARE LOGIN PROTECTION - ADMIN PANEL
+Route::group(['middleware' => ['adminlogin']], function(){
     Route::get('/admin/dashboard', 'AdminController@getDashboard');
     #SETTINGS PAGE
     Route::get('/admin/settings', 'AdminController@getSettings');
@@ -179,4 +179,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::match(['get','post'],'/admin/edit-banner/{id}','BannersController@editBanner');
     Route::get('/admin/delete-banner/{id}', 'BannersController@deleteBanner');
 
+    #ADMIN ORDERS
+    Route::get('/admin/view-orders', 'ProductController@viewOrders');
+
+    #ADMIN ORDER DETAILS
+    Route::get('/admin/view-order/{id}', 'ProductController@viewOrderDetails');
+
+    #UPDATE ORDER STATUS
+    Route::post('/admin/update-order-status', 'ProductController@updateOrderStatus');
 });
