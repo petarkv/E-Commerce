@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Auth;
 use Session;
 use Image;
@@ -755,6 +756,35 @@ class ProductController extends Controller
             Session::put('payment_method',$data['payment_method']);
 
             if($data['payment_method']=="COD"){
+
+                $productDetails = Order::with('orders')->where('id',$order_id)->first();
+                $productDetails = \json_decode(\json_encode($productDetails),true);
+                //echo "<pre>"; print_r($productDetails); die;
+
+                $userDetails = User::where('id',$user_id)->first();
+                $userDetails = \json_decode(\json_encode($userDetails),true);
+                //echo "<pre>"; print_r($userDetails); die;
+
+                /* Code for Order Email Start */
+                $email = $user_email;
+                $messageData = [
+                    'email'=>$email,
+                    'name'=>$shippingDetails->name,
+                    'surname'=>$shippingDetails->surname,
+                    'order_id' => $order_id,
+                    'productDetails' => $productDetails,
+                    'userDetails' => $userDetails
+                ];
+                Mail::send('emails.order',$messageData,function($message) use($email){
+                    $message->to($email)->subject('Order Placed - ECommerce');
+                    $message->from('mile.javakv@gmail.com','ECommerce');
+                });
+                /* Code for Order Email End */
+
+
+
+
+
                 return \redirect('/thanks');
             }else{
                 return \redirect('/paypal');

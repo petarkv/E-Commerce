@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\Country;
 use Auth;
@@ -24,6 +25,11 @@ class UsersController extends Controller
             $data = $request->all();
             //echo "<pre>"; print_r($data); die;
             if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
+                $userStatus = User::where('email',$data['email'])->first();
+                if($userStatus->status == 0){
+                    return \redirect()->back()->with('flash_message_error','Your account is not activated!
+                            Please confirm your email to activate.'); 
+                }
                 Session::put('frontSession',$data['email']); //Prevent Routes with Middleware
                 return \redirect('/');
             }else{
@@ -54,10 +60,57 @@ class UsersController extends Controller
                 $user->email = $data['email'];
                 $user->password = \bcrypt($data['password']);
                 $user->save();
+
+                // Send Register Email
+                /*$email = $data['email'];
+                $messageData = ['email'=>$data['email'],'name'=>$data['name'],'surname'=>$data['surname']];
+                Mail::send('emails.register',$messageData,function($message) use($email){
+                    $message->to($email)->subject('Registration with ECommerce');
+                    $message->from('mile.javakv@gmail.com','ECommerce');
+                });*/
+
+                // Send Confirmation Email
+                $email = $data['email'];
+                $messageData = ['email'=>$data['email'],'name'=>$data['name'],'surname'=>$data['surname'],
+                                'code'=>base64_encode($data['email'])];
+                Mail::send('emails.confirmation',$messageData,function($message) use($email){
+                    $message->to($email)->subject('Confirm Your ECommerce Account');
+                    $message->from('mile.javakv@gmail.com','ECommerce');
+                });
+
+                return \redirect()->back()->with('flash_message_success','Please confirm your email to
+                activate your account!');
+
                 if (Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])) {
                     Session::put('frontSession',$data['email']);  //Prevent Routes with Middleware
                     return \redirect('/');
                 }
+        }
+    }
+
+    public function confirmAccount($email){
+        $email = base64_decode($email);
+        $userCount = User::where('email',$email)->count();
+        if ($userCount > 0) {
+            $userDetails = User::where('email',$email)->first();
+            if ($userDetails->status == 1) {
+                return \redirect('/login-register')->with('flash_message_success','Your email account is already 
+                    activated. You can login now.');
+            }else{
+                User::where('email',$email)->update(['status'=>1]);
+
+                // Send Welcome Email                
+                $messageData = ['email'=>$email,'name'=>$userDetails->name,'surname'=>$userDetails->surname];
+                Mail::send('emails.welcome',$messageData,function($message) use($email){
+                    $message->to($email)->subject('Welcome to ECommerce');
+                    $message->from('mile.javakv@gmail.com','ECommerce');
+                });
+
+                return \redirect('/login-register')->with('flash_message_success','Your email account is 
+                    activated. You can login now.');
+            }
+        }else{
+            abort(404);
         }
     }
 

@@ -75,6 +75,9 @@ Route::get('/login-register', 'UsersController@getLoginRegister');
 # USER REGISTER
 Route::post('/user-register', 'UsersController@postUserRegister');
 
+# CONFIRM USER ACCOUNT
+Route::get('/confirm/{code}', 'UsersController@confirmAccount');
+
 # USER LOGIN
 Route::post('/user-login', 'UsersController@postUserLogin');
 
