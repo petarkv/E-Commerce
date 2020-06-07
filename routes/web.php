@@ -87,6 +87,9 @@ Route::match(['get','post'],'/check-username','UsersController@checkUsername');
 
 Route::match(['get','post'],'/check-username-update','UsersController@checkUsernameUpdate');
 
+# SEARCH PRODUCTS
+Route::post('/search-products', 'ProductController@searchProducts');
+
 #MIDDLEWARE LOGIN USER PROTECTION
 Route::group(['middleware'=>['frontlogin']],function(){
     # USERS ACCOUNT PAGE
@@ -190,4 +193,7 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
     #UPDATE ORDER STATUS
     Route::post('/admin/update-order-status', 'ProductController@updateOrderStatus');
+
+    #ADMIN USERS ROUTE
+    Route::get('/admin/view-users', 'UsersController@viewUsers');
 });
