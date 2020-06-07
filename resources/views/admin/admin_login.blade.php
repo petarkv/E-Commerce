@@ -2,7 +2,7 @@
 <html lang="en">
     
 <head>
-        <title>Matrix Admin</title><meta charset="UTF-8" />
+        <title>MyShop Admin</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="{{ asset('css/template_css/bootstrap.min.css') }}" />
 		<link rel="stylesheet" href="{{ asset('css/template_css/bootstrap-responsive.min.css') }}" />

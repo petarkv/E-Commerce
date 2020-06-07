@@ -858,4 +858,23 @@ class ProductController extends Controller
     public function cancelPaypal(){
         return \view('orders.cancel_paypal');
     }
+
+    public function searchProducts(Request $request){
+        if($request->isMethod('post')){
+            $data = $request->all(); 
+            //echo "<pre>"; print_r($data); die;
+
+            $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+
+            $search_product = $data['product'];
+
+            $productsAll = Product::where('product_name','like','%'.$search_product.'%')->
+                    orwhere('product_code',$search_product)->where('status',1)->get();
+            
+            $banners = Banner::where('status','1')->get();
+
+            return view('products.listing')->with(\compact('categories','productsAll',
+                                                    'search_product','banners'));
+        }
+    }
 }

@@ -43,7 +43,13 @@
             
             <div class="col-sm-9 padding-right">
                 <div class="features_items"><!--features_items-->
-                    <h2 class="title text-center">{{ $categoryDetails->name }}</h2>
+                    <h2 class="title text-center">
+                        @if(!empty($search_product))
+                            {{ $search_product }}
+                        @else
+                            {{ $categoryDetails->name }}
+                        @endif
+                    </h2>
                     @foreach ($productsAll as $product)
                     <div class="col-sm-4">
                         <div class="product-image-wrapper">
