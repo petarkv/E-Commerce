@@ -124,8 +124,9 @@ $mainCategories = Controller::mainCategories();
                 <div class="col-sm-3">
                     <div class="search_box pull-right">
                         <form action="{{ url('/search-products') }}" method="POST">{{ csrf_field() }}
-                        <input type="text" placeholder="Search Product" name="product"/>
-                        <button type="submit" style="border: 0px; height: 35px; margin-left: -3px;">Go</button>
+                            <input type="text" placeholder="Search Product" name="product"/>
+                            <button type="submit" style="border: 0px; height: 35px; margin-left: -3px;">Go</button>
+                        </form>
                     </div>
                 </div>
             </div>
