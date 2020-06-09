@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\User;
 use App\Country;
 use Auth;
@@ -86,6 +87,46 @@ class UsersController extends Controller
                     return \redirect('/');
                 }
         }
+    }
+
+    public function forgotPassword(Request $request){
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            //echo "<pre>"; print_r($data); die;
+            $userCount = User::where('email',$data['email'])->count();
+            if ($userCount == 0) {
+                return \redirect()->back()->with('flash_message_error','Email does not exists!');
+            }
+
+            $userDetails = User::where('email',$data['email'])->first();
+
+            // Generate Random Password
+            $random_password = Str::random(8);
+
+            // Encode/Secure Password
+            $new_password = \bcrypt($random_password);
+
+            // Update Password
+            User::where('email',$data['email'])->update(['password'=>$new_password]);
+
+            // Send Forgot Password Email Code
+            $email = $data['email'];
+            $name = $userDetails->name;
+            $surname = $userDetails->surname;
+            $messageData = [
+                'email'=>$email,
+                'name'=>$name,
+                'surname'=>$surname,
+                'password'=>$random_password
+            ];
+            Mail::send('emails.forgotpassword',$messageData,function($message)use($email){
+                $message->to($email)->subject('New Password - ECommerce');
+                $message->from('mile.javakv@gmail.com','ECommerce');
+            });
+            return \redirect('/login-register')->with('flash_message_success','Please check Your email
+                for new password.');
+        }
+        return \view('users.forgot_password');
     }
 
     public function confirmAccount($email){

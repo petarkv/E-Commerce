@@ -106,6 +106,14 @@
                     value="1">
                   </div>
                 </div>
+
+                <div class="control-group">
+                  <label class="control-label">Feature Item</label>
+                  <div class="controls">
+                    <input type="checkbox" name="feature_item" id="feature_item" @if($productDetails->feature_item==1) checked @endif
+                    value="1">
+                  </div>
+                </div>
                 
                 <div class="form-actions">
                   <input type="submit" value="Edit Product" class="btn btn-success">
