@@ -11,7 +11,7 @@ class IndexController extends Controller
 {
     public function index(){
         //$productsAll = Product::orderBy('id','DESC')->take(3)->get();
-        $productsAll = Product::orderBy('id','DESC')->get();
+        $productsAll = Product::orderBy('id','DESC')->where('status',1)->where('feature_item',1)->paginate(6);
 
         //\dump($productsAll);
         // Get All Categories and Sub Categories

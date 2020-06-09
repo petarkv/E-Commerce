@@ -94,6 +94,13 @@ class ProductController extends Controller
             }
             $product->status = $status;
 
+            if(empty($data['feature_item'])){
+                $feature_item = 0;
+            }else{
+                $feature_item = 1;
+            }
+            $product->feature_item = $feature_item;
+
             $product->save();
             //return \redirect()->back()->with('flash_message_success','Product has been added successfuly');
             return \redirect('/admin/view-products')->with('flash_message_success','Product has been added successfuly');
@@ -177,6 +184,12 @@ class ProductController extends Controller
             }else{
                 $status = 1;
             }
+
+            if(empty($data['feature_item'])){
+                $feature_item = 0;
+            }else{
+                $feature_item = 1;
+            }
             
             Product::where(['id'=>$id])->update(['category_id'=>$data['category_id'],
                                                 'product_name'=>$data['product_name'],
@@ -186,7 +199,8 @@ class ProductController extends Controller
                                                 'care'=>$data['care'],
                                                 'price'=>$data['price'],
                                                 'image'=>$filename,
-                                                'status'=>$status]);
+                                                'status'=>$status,
+                                                'feature_item'=>$feature_item]);
 
             return \redirect()->back()->with('flash_message_success','Product has been updated Successfully');
         }
@@ -371,11 +385,11 @@ class ProductController extends Controller
                 $cat_ids[] = $subcat->id;
             }
             //print_r($cat_ids); die;
-            $productsAll = Product::whereIn('category_id',$cat_ids)->where('status',1)->get();
-            $productsAll = \json_decode(\json_encode($productsAll));
+            $productsAll = Product::whereIn('category_id',$cat_ids)->where('status',1)->paginate(3);
+            //$productsAll = \json_decode(\json_encode($productsAll));
             //echo "<pre>"; print_r($productsAll);
         }else{
-            $productsAll = Product::where(['category_id' => $categoryDetails->id])->where('status',1)->get();
+            $productsAll = Product::where(['category_id' => $categoryDetails->id])->where('status',1)->paginate(3);
         }
 
         $banners = Banner::where('status','1')->get();
@@ -441,6 +455,17 @@ class ProductController extends Controller
 
         $data = $request->all();
         //echo "<pre>"; print_r($data); die;
+
+        // Check Product Stock is available or not
+        $product_size = explode("-",$data['size']);
+        //echo $product_size[1]; die;
+        $getProductStock = ProductsAttribute::where(['product_id'=>$data['product_id'],
+                            'size'=>$product_size[1]])->first();
+        //echo $getProductStock->stock; die;
+
+        if ($getProductStock->stock < $data['quantity']) {
+            return \redirect()->back()->with('flash_message_error','Required Quantity is not available!');
+        }
 
         if (empty(Auth::user()->email)) {
             $data['user_email'] = '';
@@ -834,6 +859,17 @@ class ProductController extends Controller
         //$userDetails = \json_decode(\json_encode($userDetails));
         //echo "<pre>"; print_r($userDetails); die;
         return \view('admin.orders.order_details')->with(\compact('orderDetails','userDetails'));
+    }
+
+    public function viewOrderInvoice($order_id){
+        $orderDetails = Order::with('orders')->where('id',$order_id)->first();
+        $orderDetails = \json_decode(\json_encode($orderDetails));
+        //echo "<pre>"; print_r($orderDetails); die;
+        $user_id = $orderDetails->user_id;
+        $userDetails = User::where('id',$user_id)->first();
+        //$userDetails = \json_decode(\json_encode($userDetails));
+        //echo "<pre>"; print_r($userDetails); die;
+        return \view('admin.orders.order_invoice')->with(\compact('orderDetails','userDetails'));
     }
 
     public function updateOrderStatus(Request $request){

@@ -110,7 +110,7 @@
                     <div class="single-widget">
                         <h2>Policies</h2>
                         <ul class="nav nav-pills nav-stacked">
-                            <li><a href="#">Terms of Use</a></li>
+                            <li><a href="{{ url('/page/terms-conditions') }}">Terms & Conditions</a></li>
                             <li><a href="#">Privecy Policy</a></li>
                             <li><a href="#">Refund Policy</a></li>
                             <li><a href="#">Billing System</a></li>
@@ -122,7 +122,7 @@
                     <div class="single-widget">
                         <h2>About MyShop</h2>
                         <ul class="nav nav-pills nav-stacked">
-                            <li><a href="#">Company Information</a></li>
+                            <li><a href="{{ url('/page/about-us') }}">About Us</a></li>
                             <li><a href="#">Careers</a></li>
                             <li><a href="#">Store Location</a></li>
                             <li><a href="#">Affillate Program</a></li>

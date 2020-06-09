@@ -43,7 +43,7 @@
             
             <div class="col-sm-9 padding-right">
                 <div class="features_items"><!--features_items-->
-                    <h2 class="title text-center">All Items</h2>
+                    <h2 class="title text-center">Features Items</h2>
                     @foreach ($productsAll as $product)
                     <div class="col-sm-4">
                         <div class="product-image-wrapper">
@@ -70,10 +70,9 @@
                             </div>
                         </div>
                     </div>
-                    @endforeach                 
-                    
+                    @endforeach                     
                 </div><!--features_items-->
-                
+                <div align="center">{{ $productsAll->links() }}</div>  
                 <!--div class="category-tab"--><!--category-tab-->
                     <!--div class="col-sm-12">
                         <ul class="nav nav-tabs">

@@ -94,6 +94,13 @@
                 </div>
 
                 <div class="control-group">
+                  <label class="control-label">Feature Item</label>
+                  <div class="controls">
+                    <input type="checkbox" name="feature_item" id="feature_item" value="1">
+                  </div>
+                </div>
+
+                <div class="control-group">
                   <label class="control-label">Enable</label>
                   <div class="controls">
                     <input type="checkbox" name="status" id="status" value="1">

@@ -72,6 +72,9 @@ Route::post('/cart/apply-coupon','ProductController@applyCoupon');
 # REGISTER / LOGIN USER
 Route::get('/login-register', 'UsersController@getLoginRegister');
 
+# FORGET PASSWORD USER
+Route::match(['get','post'],'/forgot-password','UsersController@forgotPassword');
+
 # USER REGISTER
 Route::post('/user-register', 'UsersController@postUserRegister');
 
@@ -89,6 +92,9 @@ Route::match(['get','post'],'/check-username-update','UsersController@checkUsern
 
 # SEARCH PRODUCTS
 Route::post('/search-products', 'ProductController@searchProducts');
+
+# CMS PAGES FRONT END
+Route::match(['get','post'],'/page/{url}','CmsController@cmsPage');
 
 #MIDDLEWARE LOGIN USER PROTECTION
 Route::group(['middleware'=>['frontlogin']],function(){
@@ -191,9 +197,22 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #ADMIN ORDER DETAILS
     Route::get('/admin/view-order/{id}', 'ProductController@viewOrderDetails');
 
+    #ADMIN ORDER INVOICE
+    Route::get('/admin/view-order-invoice/{id}', 'ProductController@viewOrderInvoice');
+
     #UPDATE ORDER STATUS
     Route::post('/admin/update-order-status', 'ProductController@updateOrderStatus');
 
     #ADMIN USERS ROUTE
     Route::get('/admin/view-users', 'UsersController@viewUsers');
+
+    #ADD CMS PAGE ADMIN PANEL
+    Route::match(['get','post'],'/admin/add-cms-page','CmsController@addCmsPage');
+    #VIEW CMS PAGES ADMIN PANEL
+    Route::get('/admin/view-cms-pages', 'CmsController@viewCmsPages');
+    #EDIT CMS PAGE ADMIN PANEL
+    Route::match(['get','post'],'/admin/edit-cms-page/{id}','CmsController@editCmsPage');
+    #DELETE CMS PAGE ADMIN PANEL
+    Route::get('/admin/delete-cms-page/{id}', 'CmsController@deleteCmsPages');
+
 });
