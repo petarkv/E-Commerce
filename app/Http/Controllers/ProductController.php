@@ -394,7 +394,12 @@ class ProductController extends Controller
 
         $banners = Banner::where('status','1')->get();
         
-        return view('products.listing')->with(\compact('categories','categoryDetails','productsAll','banners'));
+        $meta_title = $categoryDetails->meta_title;
+        $meta_description = $categoryDetails->meta_description;
+        $meta_keywords = $categoryDetails->meta_keywords;
+
+        return view('products.listing')->with(\compact('categories','categoryDetails','productsAll','banners',
+                    'meta_title','meta_description','meta_keywords'));
     }
 
 
@@ -433,7 +438,12 @@ class ProductController extends Controller
 
         $total_stock = ProductsAttribute::where('product_id',$id)->sum('stock');
 
-        return \view('products.detail')->with(\compact('productDetails','categories','productAltImages','total_stock','relatedProducts'));
+        $meta_title = $productDetails->product_name;
+        $meta_description = $productDetails->description;
+        $meta_keywords = $productDetails->product_name;
+
+        return \view('products.detail')->with(\compact('productDetails','categories','productAltImages','total_stock',
+                    'relatedProducts','meta_title','meta_description','meta_keywords'));
     }
 
     public function getProductPrice(Request $request){    
@@ -532,7 +542,10 @@ class ProductController extends Controller
             $userCart[$key]->image = $productDetails->image;
         }
         //echo "<pre>"; print_r($userCart); die;
-        return \view('products.cart')->with(\compact('userCart'));
+        $meta_title = "Shopping Cart - ECommerce";
+        $meta_description = "View Shopping Cart of ECommerce Website";
+        $meta_keywords = "shopping cart, ecommerce website";
+        return \view('products.cart')->with(\compact('userCart','meta_title','meta_description','meta_keywords'));
     }
 
     public function deleteCartProduct($id=null){
@@ -699,7 +712,8 @@ class ProductController extends Controller
             return \redirect()->action('ProductController@orderReview');
         }
 
-        return \view('products.checkout')->with(\compact('userDetails','countries','shippingDetails'));
+        $meta_title = "Checkout - ECommerce";
+        return \view('products.checkout')->with(\compact('userDetails','countries','shippingDetails','meta_title'));
     }
 
     public function orderReview(){
@@ -715,7 +729,8 @@ class ProductController extends Controller
             $userCart[$key]->image = $productDetails->image;
         }
         //echo "<pre>"; print_r($userCart); die;
-        return \view('products.order_review')->with(\compact('userDetails','shippingDetails','userCart'));
+        $meta_title = "Order Review - ECommerce";
+        return \view('products.order_review')->with(\compact('userDetails','shippingDetails','userCart','meta_title'));
     }
 
     public function placeOrder(Request $request){     
