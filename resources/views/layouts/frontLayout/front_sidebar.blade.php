@@ -29,8 +29,8 @@
     </div><!--/category-products-->
 
 
-    <div class="shipping text-center"><!--shipping-->
-        <img src="{{ asset('images/main_images/home/shipping.jpg') }}" alt="" />
-    </div><!--/shipping-->
+    <!--div class="shipping text-center"--><!--shipping-->
+        <!--img src="{{ asset('images/main_images/home/shipping.jpg') }}" alt="" /-->
+    <!--/div--><!--/shipping-->
 
 </div>

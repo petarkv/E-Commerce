@@ -93,6 +93,9 @@ Route::match(['get','post'],'/check-username-update','UsersController@checkUsern
 # SEARCH PRODUCTS
 Route::post('/search-products', 'ProductController@searchProducts');
 
+# CONTACT PAGE
+Route::match(['get','post'],'/page/contact','CmsController@contact');
+
 # CMS PAGES FRONT END
 Route::match(['get','post'],'/page/{url}','CmsController@cmsPage');
 

@@ -45,8 +45,11 @@ class IndexController extends Controller
         }*/
 
         $banners = Banner::where('status','1')->get();
-
-        //return view('index')->with(\compact('productsAll','categories_menu')); 
-        return view('index')->with(\compact('productsAll','categories','banners'));       
+        // Meta tags
+        $meta_title = "ECommerce Website";
+        $meta_description = "Online Shopping Site for Men, Women and Kids Clothing";
+        $meta_keywords = "eshop website, online shopping, men clothing";
+        return view('index')->with(\compact('productsAll','categories','banners',
+            'meta_title','meta_description','meta_keywords'));       
     }
 }

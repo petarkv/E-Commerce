@@ -115,9 +115,8 @@ $mainCategories = Controller::mainCategories();
                                     <li><a href="blog.html">Blog List</a></li>
                                     <li><a href="blog-single.html">Blog Single</a></li>
                                 </ul>
-                            </li> 
-                            <li><a href="404.html">404</a></li>
-                            <li><a href="contact-us.html">Contact</a></li>
+                            </li>                             
+                            <li><a href="{{ url('/page/contact') }}">Contact</a></li>
                         </ul>
                     </div>
                 </div>

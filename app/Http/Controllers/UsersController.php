@@ -18,7 +18,8 @@ class UsersController extends Controller
     }*/
 
     public function getLoginRegister(){
-        return \view('users.login_register');
+        $meta_title = "User Login/Register - ECommerce";
+        return \view('users.login_register')->with(\compact('meta_title'));
     }
 
     public function postUserLogin(Request $request){
