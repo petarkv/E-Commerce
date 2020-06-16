@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-sm-7">
                         <form name="addtocartForm" id="addtocartForm" action="{{ url('add-cart') }}" method="POST">{{ csrf_field() }}
-                        <div class="product-information"><!--/product-information-->
+                        <div class="product-information" style="margin-top: -50px;"><!--/product-information-->
                             <input type="hidden" name="product_id" value="{{ $productDetails->id }}">
                             <input type="hidden" name="product_name" value="{{ $productDetails->product_name }}">
                             <input type="hidden" name="product_code" value="{{ $productDetails->product_code }}">
@@ -85,8 +85,13 @@
                                 @endif
                             </span>
                             <p><b>Availability:</b><span id="Availability">@if($total_stock>0) In Stock @else Out of Stock @endif</p></span>
-                            <p><b>Condition:</b> New</p>                           
-                            <a href=""><img src="{{ asset('images/main_images/product-details/share.png') }}" class="share img-responsive"  alt="" /></a>
+                            <p><b>Condition:</b> New</p>
+                            <p><b>Delivery: </b>
+                            <input type="text" name="postal_code" id="chkPostalCode" placeholder="Check Postal Code">
+                            <button type="button" onclick="return checkPostalCode();">Go</button></p>
+                            <span id="postalcodeResponse"></span>
+                            
+                            <!--a href=""><img src="{{ asset('images/main_images/product-details/share.png') }}" class="share img-responsive"  alt="" /></a-->
                         </div><!--/product-information-->
                         </form>
                     </div>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\CmsPage;
 use App\Category;
+use App\Enquiry;
 
 class CmsController extends Controller
 {
@@ -156,5 +157,22 @@ class CmsController extends Controller
 
         return \view('pages.contact')->with(\compact('categories',
                 'meta_title','meta_description','meta_keywords'));
+    }
+
+    public function addPost(Request $request){
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            //echo "<pre>"; print_r($data); die;
+            $enquiry = new Enquiry;
+            $enquiry->name = $data['name'];
+            $enquiry->email = $data['email'];
+            $enquiry->subject = $data['subject'];
+            $enquiry->message = $data['message'];
+            $enquiry->save();
+            echo "Thanks for contacting us. We will get back to you soon."; die;
+        }
+        $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+
+        return \view('pages.post')->with(\compact('categories'));
     }
 }

@@ -12,6 +12,14 @@
         </div><!--/breadcrums-->
 
         <div class="row">
+
+            @if (Session::has('flash_message_error'))                
+                <div class="alert alert-error alert-block" style="background-color: #f2dfd0">
+                    <button type="button" class="close" data-dismiss="alert">×</button>                
+                    <strong>{!! session('flash_message_error') !!}</strong>                
+                </div>
+            @endif
+
             <div class="col-sm-4 col-sm-offset-1">
                 <div class="login-form">
                     <h2>Billing Details</h2> 
@@ -153,12 +161,17 @@
                 <span>
                     <label><strong>Select Payment Method:</strong></label>
                 </span>
+                @if($codpostalcodeCount>0)
                 <span>
                     <label><input type="radio" name="payment_method" id="COD" value="COD"> <strong>COD</strong></label>
                 </span>
+                @endif
+
+                @if($prepaidpostalcodeCount>0)
                 <span>
                     <label><input type="radio" name="payment_method" id="Paypal" value="Paypal"> <strong>Paypal</strong></label>
                 </span>
+                @endif
                 <span style="float: right;">
                     <button type="submit" class="btn btn-default check_out" onclick="return selectPaymentMethod();">Place Order</button>
                 </span>

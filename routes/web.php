@@ -90,11 +90,17 @@ Route::match(['get','post'],'/check-username','UsersController@checkUsername');
 
 Route::match(['get','post'],'/check-username-update','UsersController@checkUsernameUpdate');
 
+# Check Postal Code
+Route::post('/check-postalcode','ProductController@checkPostalCode');
+
 # SEARCH PRODUCTS
 Route::post('/search-products', 'ProductController@searchProducts');
 
 # CONTACT PAGE
 Route::match(['get','post'],'/page/contact','CmsController@contact');
+
+# POST PAGE (for Vue.js)
+Route::match(['get','post'],'/page/post','CmsController@addPost');
 
 # CMS PAGES FRONT END
 Route::match(['get','post'],'/page/{url}','CmsController@cmsPage');
