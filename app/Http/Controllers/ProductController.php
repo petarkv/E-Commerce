@@ -466,16 +466,7 @@ class ProductController extends Controller
         $data = $request->all();
         //echo "<pre>"; print_r($data); die;
 
-        // Check Product Stock is available or not
-        $product_size = explode("-",$data['size']);
-        //echo $product_size[1]; die;
-        $getProductStock = ProductsAttribute::where(['product_id'=>$data['product_id'],
-                            'size'=>$product_size[1]])->first();
-        //echo $getProductStock->stock; die;
-
-        if ($getProductStock->stock < $data['quantity']) {
-            return \redirect()->back()->with('flash_message_error','Required Quantity is not available!');
-        }
+        
 
         if (empty(Auth::user()->email)) {
             $data['user_email'] = '';
@@ -498,6 +489,17 @@ class ProductController extends Controller
         if(empty($sizeArr[1])){
             return \redirect()->back()->with('flash_message_error','You need to select Product size first!');
         }else{
+            // Check Product Stock is available or not
+            $product_size = explode("-",$data['size']);
+            //echo $product_size[1]; die;
+            $getProductStock = ProductsAttribute::where(['product_id'=>$data['product_id'],
+                            'size'=>$product_size[1]])->first();
+            //echo $getProductStock->stock; die;
+
+            if ($getProductStock->stock < $data['quantity']) {
+                return \redirect()->back()->with('flash_message_error','Required Quantity is not available!');
+            }
+
             $countProducts = DB::table('cart')->where(['product_id'=>$data['product_id'],        
                                                     'product_color'=>$data['product_color'],        
                                                     'size'=>$sizeArr[1],      
@@ -708,7 +710,14 @@ class ProductController extends Controller
                 $shipping->pincode = $data['shipping_pincode'];
                 $shipping->mobile = $data['shipping_mobile'];
                 $shipping->save();
-            }                                
+            } 
+           
+            $postalcodeCount = DB::table('postal_codes')->where('postal_code',$data['shipping_pincode'])->count();
+            if ($postalcodeCount == 0) {
+                return \redirect()->back()->with('flash_message_error','Your location is not available for delivery.
+                            Please enter another location.');
+            }
+
             return \redirect()->action('ProductController@orderReview');
         }
 
@@ -729,8 +738,11 @@ class ProductController extends Controller
             $userCart[$key]->image = $productDetails->image;
         }
         //echo "<pre>"; print_r($userCart); die;
+        $codpostalcodeCount = DB::table('cod_postal_codes')->where('postal_code',$shippingDetails->pincode)->count();
+        $prepaidpostalcodeCount = DB::table('prepaid_postal_codes')->where('postal_code',$shippingDetails->pincode)->count();
         $meta_title = "Order Review - ECommerce";
-        return \view('products.order_review')->with(\compact('userDetails','shippingDetails','userCart','meta_title'));
+        return \view('products.order_review')->with(\compact('userDetails','shippingDetails','userCart','meta_title',
+                'codpostalcodeCount','prepaidpostalcodeCount'));
     }
 
     public function placeOrder(Request $request){     
@@ -743,6 +755,12 @@ class ProductController extends Controller
             $shippingDetails = DeliveryAddress::where(['user_email' => $user_email])->first();
             //$shipping = \json_decode(json_encode($shipping));
             //echo "<pre>"; print_r($shipping); die;
+
+            $postalcodeCount = DB::table('postal_codes')->where('postal_code',$shippingDetails->pincode)->count();
+            if ($postalcodeCount == 0) {
+                return \redirect()->back()->with('flash_message_error','Your location is not available for delivery.
+                            Please enter another location.');
+            }
 
             //echo "<pre>"; print_r($data); die;
             if(empty(Session::get('couponCode'))){
@@ -926,6 +944,19 @@ class ProductController extends Controller
 
             return view('products.listing')->with(\compact('categories','productsAll',
                                                     'search_product','banners'));
+        }
+    }
+
+    public function checkPostalCode(Request $request){
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            //echo "<pre>"; print_r($data); die;
+            $postalcodeCount = DB::table('postal_codes')->where('postal_code',$data['postal_code'])->count();
+            if ($postalcodeCount > 0) {
+                echo "This Postal Code is available for delivery";
+            }else{
+                echo "This Postal Code is not available for delivery";
+            }
         }
     }
 }

@@ -368,3 +368,26 @@ function selectPaymentMethod() {
 	
 }
 
+function checkPostalCode(){
+	var postal_code = $("#chkPostalCode").val();
+	if (postal_code=="") {
+		alert("Please enter Postal Code"); return false;
+	}
+	$.ajax({
+		type:'post',
+		data:{"postal_code":postal_code},
+		url:'/check-postalcode',
+		success:function(resp){
+			//alert(resp);
+			if(resp=="This Postal Code is available for delivery"){
+				$("#postalcodeResponse").html("<font color='green'>"+resp+"</font>");
+			}else{
+				$("#postalcodeResponse").html("<font color='red'>"+resp+"</font>");
+			}			
+		},error:function(){
+			alert("Error");
+		}
+	});
+	
+}
+
