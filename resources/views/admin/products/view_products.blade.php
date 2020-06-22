@@ -58,7 +58,7 @@
                         <td>{{ $product->product_name }}</td>
                         <td>{{ $product->product_code }}</td>
                         <td>{{ $product->product_color }}</td>
-                        <td>{{ $product->price }}</td>
+                        <td>EUR {{ $product->price }}</td>
                         <td>
                             @if (!empty($product->image))
                             <img src="{{ asset('/images/template_images/products/small/'.$product->image) }}" 

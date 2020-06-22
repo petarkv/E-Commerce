@@ -1,6 +1,6 @@
 @extends('layouts.frontLayout.front_design')
 @section('content')
-    
+<?php use App\Product; ?>    
 <section id="cart_items">
     <div class="container">
         <div class="breadcrumbs">
@@ -49,7 +49,7 @@
                             <p>Size: {{ $cart->size }}</p>
                         </td>
                         <td class="cart_price">
-                            <p>EUR {{ $cart->price }}</p>
+                            <p>EUR {{ $cart->price }}</p>                            
                         </td>
                         <td class="cart_quantity">
                             <div class="cart_quantity_button">
@@ -105,9 +105,23 @@
                         @if(!empty(Session::get('couponAmount')))                       
                             <li>Sub Total <span>EUR <?php echo $total_amount; ?></span></li>
                             <li>Coupon Discount <span>EUR <?php echo Session::get('couponAmount'); ?></span></li>
-                            <li>Grand Total <span>EUR <?php echo $total_amount - Session::get('couponAmount'); ?></span></li>
+                            <?php 
+                            $total_amount = $total_amount - Session::get('couponAmount');
+                            $getCurrencyRates = Product::getCurrencyRates($total_amount); ?>
+                            <li>Grand Total <span class="btn-secondary" data-toggle="tooltip" 
+                                data-html="true" title="
+                                USD {{ $getCurrencyRates['USD_Rate'] }}<br>
+                                RSD {{ $getCurrencyRates['RSD_Rate'] }}<br>                                        
+                                CHF {{ $getCurrencyRates['CHF_Rate'] }}">
+                                EUR <?php echo $total_amount; ?></span></li>
                         @else
-                            <li>Grand Total <span>EUR <?php echo $total_amount; ?></span></li>
+                            <?php $getCurrencyRates = Product::getCurrencyRates($total_amount); ?>
+                            <li>Grand Total <span class="btn-secondary" data-toggle="tooltip" 
+                                data-html="true" title="
+                                USD {{ $getCurrencyRates['USD_Rate'] }}<br>
+                                RSD {{ $getCurrencyRates['RSD_Rate'] }}<br>                                        
+                                CHF {{ $getCurrencyRates['CHF_Rate'] }}">
+                                EUR <?php echo $total_amount; ?></span></li>
                         @endif
                     </ul>
                         <a class="btn btn-default update" href="">Update</a>

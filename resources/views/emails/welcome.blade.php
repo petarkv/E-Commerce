@@ -14,7 +14,7 @@
             <tr><td>Password: ****** (as chosen by You)</td></tr>
             <tr><td>&nbsp;</td></tr>
             <tr><td>Thanks & Regards,</td></tr>
-            <tr><td>ECommerce</td></tr>            
+            <tr><td>MyShop</td></tr>            
 
     </body>
 </html>

@@ -76,8 +76,8 @@ class UsersController extends Controller
                 $messageData = ['email'=>$data['email'],'name'=>$data['name'],'surname'=>$data['surname'],
                                 'code'=>base64_encode($data['email'])];
                 Mail::send('emails.confirmation',$messageData,function($message) use($email){
-                    $message->to($email)->subject('Confirm Your ECommerce Account');
-                    $message->from('mile.javakv@gmail.com','ECommerce');
+                    $message->to($email)->subject('Confirm Your MyShop Account');
+                    $message->from('mile.javakv@gmail.com','MyShop');
                 });
 
                 return \redirect()->back()->with('flash_message_success','Please confirm your email to
@@ -121,8 +121,8 @@ class UsersController extends Controller
                 'password'=>$random_password
             ];
             Mail::send('emails.forgotpassword',$messageData,function($message)use($email){
-                $message->to($email)->subject('New Password - ECommerce');
-                $message->from('mile.javakv@gmail.com','ECommerce');
+                $message->to($email)->subject('New Password - MyShop');
+                $message->from('mile.javakv@gmail.com','MyShop');
             });
             return \redirect('/login-register')->with('flash_message_success','Please check Your email
                 for new password.');
@@ -144,8 +144,8 @@ class UsersController extends Controller
                 // Send Welcome Email                
                 $messageData = ['email'=>$email,'name'=>$userDetails->name,'surname'=>$userDetails->surname];
                 Mail::send('emails.welcome',$messageData,function($message) use($email){
-                    $message->to($email)->subject('Welcome to ECommerce');
-                    $message->from('mile.javakv@gmail.com','ECommerce');
+                    $message->to($email)->subject('Welcome to MyShop');
+                    $message->from('mile.javakv@gmail.com','MyShop');
                 });
 
                 return \redirect('/login-register')->with('flash_message_success','Your email account is 

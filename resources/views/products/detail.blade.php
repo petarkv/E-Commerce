@@ -1,6 +1,6 @@
 @extends('layouts.frontLayout.front_design')
 @section('content')
-    
+<?php use App\Product; ?>    
 <section>
     <div class="container">
         <div class="row">
@@ -74,7 +74,16 @@
                             </p>
                             <img src="images/product-details/rating.png" alt="" />
                             <span>
-                                <span id="getPrice">EUR {{ $productDetails->price }}</span>
+                                <?php $getCurrencyRates = Product::getCurrencyRates($productDetails->price); ?>
+                                <span id="getPrice">
+                                    EUR {{ $productDetails->price }}<br>
+                                    <h2>
+                                        USD {{ $getCurrencyRates['USD_Rate'] }}<br>
+                                        RSD {{ $getCurrencyRates['RSD_Rate'] }}<br>                                        
+                                        CHF {{ $getCurrencyRates['CHF_Rate'] }}
+                                    </h2>
+                                    
+                                </span>
                                 <label>Quantity:</label>
                                 <input type="text" name="quantity" value="1" />
                                 @if($total_stock>0)
@@ -103,6 +112,9 @@
                             <li class="active"><a href="#description" data-toggle="tab">Description</a></li>
                             <li><a href="#care" data-toggle="tab">Material & Care</a></li>
                             <li><a href="#delivery" data-toggle="tab">Delivery Options</a></li>
+                            @if(!empty($productDetails->video))
+                            <li><a href="#video" data-toggle="tab">Product Video</a></li>
+                            @endif
                             <li><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
                         </ul>
                     </div>
@@ -126,6 +138,16 @@
                                 </p>
                             </div>
                         </div>
+
+                        @if(!empty($productDetails->video))
+                        <div class="tab-pane fade" id="video" >
+                            <div class="col-sm-12">
+                                <video width="320" height="240" controls>
+                                    <source src="{{ url('videos/'.$productDetails->video) }}" type="video/mp4">                                    
+                                </video> 
+                            </div>
+                        </div>
+                        @endif
                         
                         <div class="tab-pane fade" id="reviews" >
                             <div class="col-sm-12">
@@ -170,7 +192,8 @@
                                                 <img style="width: 230px;" src="{{ asset('images/template_images/products/small/'.$item->image) }}" alt="" />
                                                 <h2>EUR {{ $item->price }}</h2>
                                                 <p>{{ $item->product_name }}</p>
-                                                <a href="{{ url('product/'.$item->id) }}"><button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button></a>
+                                                <a href="{{ url('product/'.$item->id) }}"><button type="button" class="btn btn-default add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i>Add to cart</button></a>
 
                                             </div>
                                         </div>

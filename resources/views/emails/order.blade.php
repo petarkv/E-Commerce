@@ -110,7 +110,7 @@
             <tr><td>&nbsp;</td></tr>
             <tr><td>For any enquiries, you can contact us at <a href="mailto:mile.javakv@gmail.com">mile.javakv@gmail.com</a></td></tr>
             <tr><td>&nbsp;</td></tr>
-            <tr><td>Regards,<br> Team ECommerce</td></tr>
+            <tr><td>Regards,<br> Team MyShop</td></tr>
             <tr><td>&nbsp;</td></tr>
         </table>
     </body>

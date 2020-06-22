@@ -87,6 +87,16 @@ class ProductController extends Controller
                 }
             }
 
+            // Upload Video
+            if ($request->hasFile('video')) {
+                $video_tmp = $request->video;
+                //echo "<pre>"; print_r($video_tmp); die;
+                $video_name = $video_tmp->getClientOriginalName();
+                $video_path = 'videos/';
+                $video_tmp->move($video_path,$video_name);
+                $product->video = $video_name;
+            }
+
             if(empty($data['status'])){
                 $status = 0;
             }else{
@@ -167,8 +177,24 @@ class ProductController extends Controller
                     Image::make($image_tmp)->resize(600,600)->save($medium_image_path);
                     Image::make($image_tmp)->resize(300,300)->save($small_image_path);                    
                 }
-            }else{
+            }else if(!empty($data['current_image'])){
                 $filename = $data['current_image'];
+            }else{
+                $filename = '';
+            }
+
+            // Upload Video
+            if ($request->hasFile('video')) {
+                $video_tmp = $request->video;
+                //echo "<pre>"; print_r($video_tmp); die;
+                $video_name = $video_tmp->getClientOriginalName();
+                $video_path = 'videos/';
+                $video_tmp->move($video_path,$video_name);
+                $videoName = $video_name;
+            }else if(!empty($data['current_video'])){
+                $videoName = $data['current_video'];
+            }else{
+                $videoName = '';
             }
 
             if (empty($data['description'])) {
@@ -199,6 +225,7 @@ class ProductController extends Controller
                                                 'care'=>$data['care'],
                                                 'price'=>$data['price'],
                                                 'image'=>$filename,
+                                                'video'=>$videoName,
                                                 'status'=>$status,
                                                 'feature_item'=>$feature_item]);
 
@@ -208,6 +235,29 @@ class ProductController extends Controller
 
     public function deleteProduct($id=null){
         Product::where(['id'=>$id])->delete();
+
+        // Get Product Image Name
+        $productImage = Product::where(['id'=>$id])->first();
+        //echo $productImage->image; die;
+        $large_image_path = 'images/template_images/products/large/';
+        $medium_image_path = 'images/template_images/products/medium/';
+        $small_image_path = 'images/template_images/products/small/';
+
+        // Delete Large Image if exist in Folder
+        if (\file_exists($large_image_path.$productImage->image)) {
+            \unlink($large_image_path.$productImage->image);
+        }
+
+        // Delete Midium Image if exist in Folder
+        if (\file_exists($medium_image_path.$productImage->image)) {
+            \unlink($medium_image_path.$productImage->image);
+        }
+
+        // Delete Small Image if exist in Folder
+        if (\file_exists($small_image_path.$productImage->image)) {
+            \unlink($small_image_path.$productImage->image);
+        }
+
         return \redirect()->back()->with('flash_message_success', 'Product has been deleted Successfully');
     }
 
@@ -270,6 +320,23 @@ class ProductController extends Controller
         
         return \redirect()->back()->with('flash_message_success', 'Product Alternate Image(s) has been deleted Successfully');
     } 
+
+    public function deleteProductVideo($id){
+        // Get Video Name
+        $productVideo = Product::select('video')->where('id',$id)->first();
+        // Get Video Path
+        $video_path = 'videos/';
+
+        // Delete Video of exists in videos folder
+        if(\file_exists($video_path.$productVideo->video)){
+            \unlink($video_path.$productVideo->video);
+        }
+
+        // Delete Video from Products table
+        Product::where('id',$id)->update(['video'=>'']);
+
+        return \redirect()->back()->with('flash_message_success', 'Product Video has been deleted Successfully');
+    }
     
     public function addAttributes(Request $request, $id=null){
         $productDetails = Product::with('attributes')->where(['id'=>$id])->first();
@@ -389,9 +456,9 @@ class ProductController extends Controller
             //$productsAll = \json_decode(\json_encode($productsAll));
             //echo "<pre>"; print_r($productsAll);
         }else{
-            $productsAll = Product::where(['category_id' => $categoryDetails->id])->where('status',1)->paginate(3);
+            $productsAll = Product::where(['category_id' => $categoryDetails->id])->where('status',1)->paginate(3);            
         }
-
+        
         $banners = Banner::where('status','1')->get();
         
         $meta_title = $categoryDetails->meta_title;
@@ -453,7 +520,10 @@ class ProductController extends Controller
         $proArr = explode("-",$data['idSize']);
         //echo $proArr[0]; echo $proArr[1]; die;
         $proAttr = ProductsAttribute::where(['product_id' => $proArr[0], 'size' => $proArr[1]])->first();
-        echo $proAttr->price;
+        
+        $getCurrencyRates = Product::getCurrencyRates($proAttr->price);
+        echo $proAttr->price."-".$getCurrencyRates['USD_Rate']."-".$getCurrencyRates['RSD_Rate']."-".$getCurrencyRates['CHF_Rate'];
+        //echo $proAttr->price;
         echo "#";
         echo $proAttr->stock;
     } 
@@ -485,7 +555,7 @@ class ProductController extends Controller
         }
 
         $sizeArr = explode("-",$data['size']);
-
+        $priceArr = explode("-",$data['price']);
         if(empty($sizeArr[1])){
             return \redirect()->back()->with('flash_message_error','You need to select Product size first!');
         }else{
@@ -520,7 +590,7 @@ class ProductController extends Controller
                                     'product_name'=>$data['product_name'],
                                     'product_code'=>$getSKU->sku,
                                     'product_color'=>$data['product_color'],
-                                    'price'=>$data['price'],
+                                    'price'=>$priceArr[0],
                                     'size'=>$sizeArr[1],
                                     'quantity'=>$data['quantity'],
                                     'user_email'=>$data['user_email'],
@@ -614,7 +684,7 @@ class ProductController extends Controller
                 $session_id = Session::get('session_id'); 
                 $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get();
             }
-
+            //echo "<pre>"; print_r($userCart); die;
             $total_amount = 0;
             foreach ($userCart as $item) {
                 $total_amount = $total_amount + ($item->price * $item->quantity);
@@ -834,8 +904,8 @@ class ProductController extends Controller
                     'userDetails' => $userDetails
                 ];
                 Mail::send('emails.order',$messageData,function($message) use($email){
-                    $message->to($email)->subject('Order Placed - ECommerce');
-                    $message->from('mile.javakv@gmail.com','ECommerce');
+                    $message->to($email)->subject('Order Placed - MyShop');
+                    $message->from('mile.javakv@gmail.com','MyShop');
                 });
                 /* Code for Order Email End */
 

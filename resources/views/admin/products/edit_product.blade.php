@@ -100,6 +100,21 @@
                 </div>
 
                 <div class="control-group">
+                  <label class="control-label">Video</label>
+                  <div class="controls">
+                    <div id="uniform-undefined">
+                      <input type="file" name="video" id="video">
+                      @if(!empty($productDetails->video))
+                      <input type="hidden" name="current_video" value="{{ $productDetails->video }}"> 
+                      <a target="_blank" href="{{ url('videos/'.$productDetails->video) }}" 
+                              style="margin-left: 30px;"><strong>View Video</strong></a> |
+                      <a href="{{ url('/admin/delete-product-video/'.$productDetails->id) }}">Delete</a>
+                      @endif                                       
+                    </div>
+                  </div> 
+                </div>
+
+                <div class="control-group">
                   <label class="control-label">Enable</label>
                   <div class="controls">
                     <input type="checkbox" name="status" id="status" @if($productDetails->status==1) checked @endif

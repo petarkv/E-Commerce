@@ -64,6 +64,15 @@
               <a href="{{ url('/admin/view-cms-pages') }}">View CMS Pages</a></li>          
         </ul>
       </li>
+
+      <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Currencies</span> <span class="label label-important">2</span></a>
+        <ul <?php if (preg_match("/currenc/i", $url)) { ?> style="display: block;" <?php } ?>>
+          <li <?php if (preg_match("/add-currency/i", $url)) { ?> class="active" <?php } ?>>
+              <a href="{{ url('/admin/add-currency') }}">Add Currency</a></li>
+          <li <?php if (preg_match("/view-currencies/i", $url)) { ?> class="active" <?php } ?>>
+              <a href="{{ url('/admin/view-currencies') }}">View Currencies</a></li>          
+        </ul>
+      </li>
  
     </ul>
   </div>

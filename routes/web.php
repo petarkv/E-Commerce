@@ -177,6 +177,9 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #DELETE IMAGE - ADMIN
     Route::get('/admin/delete-product-image/{id}', 'ProductController@deleteProductImage');
 
+    #DELETE VIDEO - ADMIN
+    Route::get('/admin/delete-product-video/{id}', 'ProductController@deleteProductVideo');
+    #DELETE ALT IMAGE - ADMIN
     Route::get('/admin/delete-alt-image/{id}', 'ProductController@deleteAltImage');
 
     #PRODUCT ATTRIBUTES - ADMIN
@@ -223,5 +226,14 @@ Route::group(['middleware' => ['adminlogin']], function(){
     Route::match(['get','post'],'/admin/edit-cms-page/{id}','CmsController@editCmsPage');
     #DELETE CMS PAGE ADMIN PANEL
     Route::get('/admin/delete-cms-page/{id}', 'CmsController@deleteCmsPages');
+
+    #ADD CURRENCY
+    Route::match(['get','post'],'/admin/add-currency','CurrencyController@addCurrency');
+    #EDIT CURRENCY
+    Route::match(['get','post'],'/admin/edit-currency/{id}','CurrencyController@editCurrency');
+    #VIEW CURRENCIES
+    Route::match(['get','post'],'/admin/view-currencies','CurrencyController@viewCurrencies');
+    #DELETE CURRENCY
+    Route::get('/admin/delete-currency/{id}', 'CurrencyController@deleteCurrency');
 
 });
