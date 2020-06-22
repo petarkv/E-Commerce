@@ -44,9 +44,9 @@ $(document).ready(function(){
 			success:function(resp){
 				 //alert(resp); return false;
 				 var arr = resp.split('#');           //stock
-
+				 var arr1 = arr[0].split('-');
 				//$("#getPrice").html("EUR"+resp);
-				$("#getPrice").html("EUR"+arr[0]);
+				$("#getPrice").html("EUR "+arr1[0]+"<br><h2>USD "+arr1[1]+"<br>RSD "+arr1[2]+"<br>CHF "+arr1[3]+"</h2>");
 				$("#price").val(arr[0]);
 				if(arr[1]==0){
 					$("#cartButton").hide();

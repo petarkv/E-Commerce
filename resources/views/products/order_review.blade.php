@@ -1,6 +1,6 @@
 @extends('layouts.frontLayout.front_design')
 @section('content')
-
+<?php use App\Product; ?>
 <section id="cart_items">
     <div class="container">
         <div class="breadcrumbs">
@@ -110,7 +110,7 @@
                             <p>Product Code: {{ $cart->product_code }}</p>
                             <p>Size: {{ $cart->size }}</p>
                         </td>
-                        <td class="cart_price">
+                        <td class="cart_price">                            
                             <p>EUR {{ $cart->price }}</p>
                         </td>
                         <td class="cart_quantity">
@@ -147,7 +147,15 @@
                                 </tr>
                                 <tr>
                                     <td>Grand Total</td>
-                                    <td><span>EUR {{ $grand_total = $total_amount - Session::get('couponAmount') }}</span></td>
+                                    <?php 
+                                    $grand_total = $total_amount - Session::get('couponAmount');
+                                    $getCurrencyRates = Product::getCurrencyRates($total_amount); ?>
+                                    <td><span class="btn-secondary" data-toggle="tooltip" 
+                                        data-html="true" title="
+                                        USD {{ $getCurrencyRates['USD_Rate'] }}<br>
+                                        RSD {{ $getCurrencyRates['RSD_Rate'] }}<br>                                        
+                                        CHF {{ $getCurrencyRates['CHF_Rate'] }}">
+                                        EUR {{ $grand_total }}</span></td>
                                 </tr>
                             </table>
                         </td>
