@@ -40,6 +40,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 # CATEGORY LISTING PAGE
 Route::get('/products/{url}','ProductController@products');
 
+# PRODUCT FILTER PAGE
+Route::match(['get','post'],'/products-filter','ProductController@filter');
+
 # PRODUCT DETAIL PAGE
 Route::get('/product/{id}','ProductController@getProductDetails'); 
 

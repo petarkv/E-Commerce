@@ -28,26 +28,24 @@
                             <!--h3>ZOOM</h3-->
                             </div>
                         </div>
-                        <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div id="similar-product" class="carousel slide" data-ride="carousel"  style="margin-top: 200px;">
                             
-                              <!-- Wrapper for slides -->
-                                <div class="carousel-inner">
-                                    <div class="item active thumbnails">                                        
-                                    <img style="width: 80px; cursor: pointer;" class="changeImage" src="{{ asset('images/template_images/products/medium/'
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item active thumbnails">                                        
+                                <img style="width: 80px; cursor: pointer;" class="changeImage" src="{{ asset('images/template_images/products/medium/'
                                                                     .$productDetails->image) }}" alt="" />
-                                    @foreach ($productAltImages as $altimage)
-                                    <a href="{{ asset('images/template_images/products/large/'.$altimage->image) }}" 
-                                        data-standard="{{ asset('images/template_images/products/medium/'.$altimage->image) }}">
-                                        <img class="changeImage" style="width: 80px; cursor: pointer;" 
+                                @foreach ($productAltImages as $altimage)
+                                <a href="{{ asset('images/template_images/products/large/'.$altimage->image) }}" 
+                                    data-standard="{{ asset('images/template_images/products/medium/'.$altimage->image) }}">
+                                    <img class="changeImage" style="width: 80px; cursor: pointer;" 
                                             src="{{ asset('images/template_images/products/small/'.$altimage->image) }}" 
                                             alt="">
                                         
-                                    </a>
-                                    @endforeach                                                                            
-                                    </div>                                  
-                                 </div>
-
-                              
+                                </a>
+                                @endforeach                                                                            
+                                </div>                                  
+                            </div>                                                 
                         </div>
 
                     </div>
@@ -63,6 +61,10 @@
                             <img src="images/product-details/new.jpg" class="newarrival" alt="" />
                             <h2>{{ $productDetails->product_name }}</h2>
                             <p>Code: {{ $productDetails->product_code }}</p>
+                            <p>Color: {{ $productDetails->product_color }}</p>
+                            @if(!empty($productDetails->sleeve))
+                                <p>Sleeve: {{ $productDetails->sleeve }}</p>
+                            @endif
 
                             <p>
                                 <select id="selSize" name="size" style="width: 150px">
@@ -100,7 +102,8 @@
                             <button type="button" onclick="return checkPostalCode();">Go</button></p>
                             <span id="postalcodeResponse"></span>
                             
-                            <!--a href=""><img src="{{ asset('images/main_images/product-details/share.png') }}" class="share img-responsive"  alt="" /></a-->
+                            <!-- Share -->
+                            <div class="sharethis-inline-share-buttons"></div>
                         </div><!--/product-information-->
                         </form>
                     </div>

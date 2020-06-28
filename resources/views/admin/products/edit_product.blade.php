@@ -77,7 +77,20 @@
                   <div class="controls">
                     <textarea name="care" id="care">{{ $productDetails->care }}</textarea>
                   </div>
-              </div>
+                </div>
+
+                <div class="control-group" style="width: 445px;">
+                  <label class="control-label">Sleeve</label>
+                  <div class="controls">
+                    <select name="sleeve" class="form-control">
+                      <option value="">Select Sleeve</option>
+                        @foreach ($sleeveArray as $sleeve)
+                          <option value="{{ $sleeve }}" @if(!empty($productDetails->sleeve) &&
+                            $productDetails->sleeve == $sleeve) selected @endif>{{ $sleeve }}</option>
+                        @endforeach
+                    </select>
+                  </div>
+                </div>
 
                 <div class="control-group">
                     <label class="control-label">Price</label>

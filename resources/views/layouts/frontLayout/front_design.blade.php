@@ -66,5 +66,12 @@
         })
     </script>
 
+    <!-- Go to www.addthis.com/dashboard to customize your tools --> 
+    <!--script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ef67d55f5ae7e2f"></script--> 
+
+    <!-- Share This -->
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5ef687462e23bf0012362e0c&product=inline-share-buttons" 
+    async="async"></script>
+
 </body>
 </html>
