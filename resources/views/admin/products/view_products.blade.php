@@ -93,6 +93,7 @@
                             <p>Product Code: {{ $product->product_code }}</p>
                             <p>Product Color: {{ $product->product_color }}</p>
                             <p>Product Description: {{ $product->description }}</p>
+                            <p>Sleeve: {{ $product->sleeve }} </p>
                             <p>Price: {{ $product->price }} EUR</p>
                             <p>
                               Status: 

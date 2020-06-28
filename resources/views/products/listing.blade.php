@@ -80,7 +80,9 @@
                     @endforeach                 
                     
                 </div><!--features_items-->
+                @if(empty($search_product))
                 <div align="center">{{ $productsAll->links() }}</div>  
+                @endif
                 <!--div class="category-tab"><category-tab-->
                     <!--div class="col-sm-12">
                         <ul class="nav nav-tabs">
