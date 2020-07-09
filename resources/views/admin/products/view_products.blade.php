@@ -95,6 +95,7 @@
                             <p>Product Description: {{ $product->description }}</p>
                             <p>Sleeve: {{ $product->sleeve }} </p>
                             <p>Price: {{ $product->price }} EUR</p>
+                            <p>Product Weight: {{ $product->weight }} g</p>
                             <p>
                               Status: 
                             @if ($product->status == 1)

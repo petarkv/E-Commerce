@@ -51,4 +51,50 @@ class Product extends Model
         $getProductPrice = ProductsAttribute::select('price')->where(['product_id'=>$product_id,'size'=>$product_size])->first();
         return $getProductPrice->price;
     }*/
+
+    public static function getProductStock($product_id,$product_size){
+        $getProductStock = ProductsAttribute::select('stock')->
+        where(['product_id'=>$product_id,'size'=>$product_size])->first();
+        return $getProductStock->stock;
+    }
+
+    public static function deleteCartProduct($product_id,$user_email){
+        DB::table('cart')->where(['product_id'=>$product_id,'user_email'=>$user_email])->delete();
+    }
+
+    public static function getProductStatus($product_id){
+        $getProductStatus = Product::select('status')->where('id',$product_id)->first();
+        return $getProductStatus->status;
+    }
+
+    public static function getCategoryStatus($product_id){
+        $getCategoryStatus = Category::select('status')->where('id',$product_id)->first();
+        return $getCategoryStatus->status;
+    }
+
+    public static function getAttributeCount($product_id,$product_size){
+        $getAttributeCount = ProductsAttribute::where(['product_id'=>$product_id,'size'=>$product_size])->count();
+        return $getAttributeCount;
+    }
+
+    public static function getShippingCharges($total_weight,$country){
+        $shippingDetails = ShippingCharge::where('country_name',$country)->first();
+        // $shipping_charges = $shippingDetails->shipping_charges;
+        if ($total_weight>0) {
+            if ($total_weight>0 && $total_weight<=1000) {
+                $shipping_charges = $shippingDetails->shipping_charges0_1000g;
+            }else if ($total_weight>1000 && $total_weight<=3000) {
+                $shipping_charges = $shippingDetails->shipping_charges1001_3000g 	;
+            }else if ($total_weight>3000 && $total_weight<=5000) {
+                $shipping_charges = $shippingDetails->shipping_charges3001_5000g;
+            }else if ($total_weight>5000 && $total_weight<=10000) {
+                $shipping_charges = $shippingDetails->shipping_charges5001_10000g;
+            }else{
+                $shipping_charges = 0;
+            }
+        }else{
+            $shipping_charges = 0; 
+        }
+        return $shipping_charges;
+    }
 }

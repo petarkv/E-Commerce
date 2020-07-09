@@ -108,6 +108,15 @@ Route::match(['get','post'],'/page/post','CmsController@addPost');
 # CMS PAGES FRONT END
 Route::match(['get','post'],'/page/{url}','CmsController@cmsPage');
 
+#DLETE CMS ROUTE
+Route::get('/admin/delete-cms-page/{id}','CmsController@deleteCmsPage');
+
+#GET ENQUIRIES
+Route::get('/admin/get-enquiries','CmsController@getEnquiries');
+
+#VIEW ENQUIRIES
+Route::get('/admin/view-enquiries','CmsController@viewEnquiries');
+
 #MIDDLEWARE LOGIN USER PROTECTION
 Route::group(['middleware'=>['frontlogin']],function(){
     # USERS ACCOUNT PAGE
@@ -230,6 +239,12 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #DELETE CMS PAGE ADMIN PANEL
     Route::get('/admin/delete-cms-page/{id}', 'CmsController@deleteCmsPages');
 
+    #GET ENQUIRIES
+	Route::get('/admin/get-enquiries','CmsController@getEnquiries');
+
+	#VIEW ENQUIRIES
+	Route::get('/admin/view-enquiries','CmsController@viewEnquiries');
+
     #ADD CURRENCY
     Route::match(['get','post'],'/admin/add-currency','CurrencyController@addCurrency');
     #EDIT CURRENCY
@@ -239,4 +254,8 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #DELETE CURRENCY
     Route::get('/admin/delete-currency/{id}', 'CurrencyController@deleteCurrency');
 
+    #VIEW SHIPPING CHARGES
+    Route::get('/admin/view-shipping','ShippingController@viewShipping');
+    #EDIT(UPDATE) SHIPPING CHARGES
+    Route::match(['get','post'],'/admin/edit-shipping/{id}','ShippingController@editShipping');
 });

@@ -34,7 +34,7 @@
         @endforeach
     </div><!--/category-products-->
 
-    @if(!empty($url))
+@if(!empty($url))
     <h2>Colors</h2>
     <div class="panel-group" style="margin-bottom: 30px;"><!--color-productsr-->
         
@@ -62,7 +62,7 @@
     </div>
 
     <h2>Sleeve</h2>
-    <div class="panel-group" style="margin-bottom: 20px;"><!--color-productsr-->        
+    <div class="panel-group" style="margin-bottom: 20px;"><!--sleeve-productsr-->        
         @foreach($sleeveArray as $sleeve)
         @if(!empty($_GET['sleeve']))
             <?php $sleeveArr = explode('-',$_GET['sleeve']) ?>
@@ -85,8 +85,58 @@
         </div>
         @endforeach        
     </div>
+    
+    <h2>Pattern</h2>
+    <div class="panel-group" style="margin-bottom: 20px;"><!--pattern-productsr-->        
+        @foreach($patternArray as $pattern)
+        @if(!empty($_GET['pattern']))
+            <?php $patternArr = explode('-',$_GET['pattern']) ?>
+            @if(in_array($pattern,$patternArr))
+                <?php $patterncheck="checked"; ?>
+            @else
+                <?php $patterncheck=""; ?>
+            @endif
+        @else
+            <?php $patterncheck=""; ?>
+        @endif
+        <div class="panel panel-default">                
+            <div class="panel-heading">                                
+                <h4 class="panel-title">                    
+                    <input name="patternFilter[]" onchange="javascript:this.form.submit();" id="{{ $pattern }}" type="checkbox" 
+                    value="{{ $pattern }}" {{ $patterncheck }}>
+                    &nbsp;&nbsp;<span class="products-pattern">{{ $pattern }}</span>
+                </h4> 
+            </div>                  
+        </div>
+        @endforeach        
+    </div>
 
-    @endif
+    <h2>Size</h2>
+    <div class="panel-group" style="margin-bottom: 20px;"><!--pattern-productsr-->        
+        @foreach($sizesArray as $size)
+        @if(!empty($_GET['size']))
+            <?php $sizeArr = explode('-',$_GET['size']) ?>
+            @if(in_array($size,$sizeArr))
+                <?php $sizecheck="checked"; ?>
+            @else
+                <?php $sizecheck=""; ?>
+            @endif
+        @else
+            <?php $sizecheck=""; ?>
+        @endif
+        <div class="panel panel-default">                
+            <div class="panel-heading">                                
+                <h4 class="panel-title">                    
+                    <input name="sizeFilter[]" onchange="javascript:this.form.submit();" id="{{ $size }}" type="checkbox" 
+                    value="{{ $size }}" {{ $sizecheck }}>
+                    &nbsp;&nbsp;<span class="products-size">{{ $size }}</span>
+                </h4> 
+            </div>                  
+        </div>
+        @endforeach        
+    </div>
+
+@endif
 
 </div>
 </form>

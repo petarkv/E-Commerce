@@ -104,7 +104,7 @@
                                     <td class="no-line"></td>
     								<td class="no-line"></td>
     								<td class="no-line text-center"><strong>Shipping Charges (+)</strong></td>
-    								<td class="no-line text-right">EUR 0</td>
+    								<td class="no-line text-right">EUR {{ $orderDetails->shipping_charges }}</td>
                                 </tr>
                                 <tr>
                                     <td class="no-line"></td>

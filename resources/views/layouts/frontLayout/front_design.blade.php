@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@if(!empty($meta_title)) {{ $meta_title }} @else Home | E-Shopper @endif </title>
+    <title>@if(!empty($meta_title)) {{ $meta_title }} @else Home | MyShop @endif </title>
     @if(!empty($meta_description)) <meta name="description" content="{{ $meta_description }}"> 
     @endif
     @if(!empty($meta_keywords)) <meta name="keywords" content="{{ $meta_keywords }}"> 
@@ -51,6 +51,7 @@
     <script src="{{ asset('js/main_js/jquery.prettyPhoto.js') }}"></script>
     <script src="{{ asset('js/main_js/main.js') }}"></script>
     <script src="{{ asset('js/main_js/easyzoom.js') }}"></script> <!-- Easy Zoom Image -->
+    <!--script src="{{ asset('js/app.js') }}"></script-->
 
     <!-- Login / Register Users -->
     <script src="{{ asset('js/main_js/jquery.validate.js') }}"></script>

@@ -142,8 +142,8 @@ class CmsController extends Controller
                 'comment'=>$data['message']
             ];
             Mail::send('emails.enquiry',$messageData,function($message)use($email){
-                $message->to($email)->subject('Enquiry from ECommerce');
-                $message->from('mile.javakv@gmail.com','ECommerce Contact');                
+                $message->to($email)->subject('Enquiry from MyShop');
+                $message->from('mile.javakv@gmail.com','MyShop Contact');                
             });
             return \redirect()->back()->with('flash_message_success','Thanks for your enquiry.
                     We will get back to you soon.');
@@ -151,7 +151,7 @@ class CmsController extends Controller
         $categories = Category::with('categories')->where(['parent_id'=>0])->get();
 
         // Meta tags
-        $meta_title = "Contact Us - ECommerce Website";
+        $meta_title = "Contact Us - MyShop Website";
         $meta_description = "Contact us for any queries related to our products";
         $meta_keywords = "contact us, queries";
 
@@ -162,7 +162,20 @@ class CmsController extends Controller
     public function addPost(Request $request){
         if ($request->isMethod('post')) {
             $data = $request->all();
-            //echo "<pre>"; print_r($data); die;
+            // echo "<pre>"; print_r($data); die;
+
+            // Validation Post Data Page
+            // $validator = Validator::make($request->all(), [
+            //     'name' => 'required||regex:/^[\pL\s\-]+$/u|max:255',
+            //     'email' => 'required|email',
+            //     'subject' => 'required|max:255',
+            //     'message' => 'required',
+            // ]);
+            
+            // if ($validator->fails()) {
+            //     return redirect()->back()->withErrors($validator)->withInput();
+            // }
+
             $enquiry = new Enquiry;
             $enquiry->name = $data['name'];
             $enquiry->email = $data['email'];
@@ -170,9 +183,22 @@ class CmsController extends Controller
             $enquiry->message = $data['message'];
             $enquiry->save();
             echo "Thanks for contacting us. We will get back to you soon."; die;
+            // return \redirect()->back()->with('flash_message_success','Thanks for contacting us. 
+            // We will get back to you soon.');
         }
         $categories = Category::with('categories')->where(['parent_id'=>0])->get();
 
         return \view('pages.post')->with(\compact('categories'));
+    }
+
+    public function getEnquiries(){
+        $enquiries = Enquiry::orderBy('id','Desc')->get();
+        $enquiries = json_encode($enquiries);
+        return $enquiries;
+    }
+
+    public function viewEnquiries(){
+        $enquiries = Enquiry::orderBy('id','Desc')->get();
+        return view('admin.enquiries.view_enquiries')->with(\compact('enquiries'));
     }
 }
