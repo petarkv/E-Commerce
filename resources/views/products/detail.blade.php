@@ -28,10 +28,11 @@
                             <!--h3>ZOOM</h3-->
                             </div>
                         </div>
-                        <div id="similar-product" class="carousel slide" data-ride="carousel"  style="margin-top: 200px;">
+                        <div id="similar-product" class="carousel slide" data-ride="carousel"  style="margin-top: 255px;">
                             
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner">
+                                @if(count($productAltImages)>0)
                                 <div class="item active thumbnails">                                        
                                 <img style="width: 80px; cursor: pointer;" class="changeImage" src="{{ asset('images/template_images/products/medium/'
                                                                     .$productDetails->image) }}" alt="" />
@@ -44,7 +45,8 @@
                                         
                                 </a>
                                 @endforeach                                                                            
-                                </div>                                  
+                                </div> 
+                                @endif                                 
                             </div>                                                 
                         </div>
 
@@ -52,6 +54,8 @@
                     <div class="col-sm-7">
                         <form name="addtocartForm" id="addtocartForm" action="{{ url('add-cart') }}" method="POST">{{ csrf_field() }}
                         <div class="product-information" style="margin-top: -50px;"><!--/product-information-->
+                            <div align="left"><?php echo $breadcrumb; ?></div><!-- BREADCRUMB -->
+                            <div>&nbsp;</div><!-- BREADCRUMB -->
                             <input type="hidden" name="product_id" value="{{ $productDetails->id }}">
                             <input type="hidden" name="product_name" value="{{ $productDetails->product_name }}">
                             <input type="hidden" name="product_code" value="{{ $productDetails->product_code }}">
@@ -64,6 +68,9 @@
                             <p>Color: {{ $productDetails->product_color }}</p>
                             @if(!empty($productDetails->sleeve))
                                 <p>Sleeve: {{ $productDetails->sleeve }}</p>
+                            @endif
+                            @if(!empty($productDetails->pattern))
+                                <p>Pattern: {{ $productDetails->pattern }}</p>
                             @endif
 
                             <p>
@@ -104,7 +111,7 @@
                             
                             <!-- Share -->
                             <div class="sharethis-inline-share-buttons"></div>
-                        </div><!--/product-information-->
+                        </div><!--/product-information-->                        
                         </form>
                     </div>
                 </div><!--/product-details-->

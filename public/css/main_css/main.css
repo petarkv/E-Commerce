@@ -675,6 +675,22 @@ ul.sub-menu {
   color: #696763 !important;
   /*text-transform: uppercase;*/
 }
+.products-pattern {
+  border: 1px solid #F7F7F0;
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  padding-top: 15px;
+  color: #696763 !important;
+  /*text-transform: uppercase;*/
+}
+.products-size {
+  border: 1px solid #F7F7F0;
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  padding-top: 15px;
+  color: #696763 !important;
+  /*text-transform: uppercase;*/
+}
 .left-sidebar h2, .brands_products h2 {
   color: #FE980F;
   font-family: 'Roboto', sans-serif;

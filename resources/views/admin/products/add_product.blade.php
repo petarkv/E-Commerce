@@ -63,8 +63,8 @@
                     <div class="controls">
                       <input type="text" name="product_color" id="product_color">
                     </div>
-                </div>  
-                
+                </div>
+      
                 <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
@@ -83,11 +83,23 @@
                   <label class="control-label">Sleeve</label>
                   <div class="controls">
                     <select name="sleeve" class="form-control">
-                    <option value="">Select Sleeve</option>
+                      <option value="">Select Sleeve</option>
                       @foreach ($sleeveArray as $sleeve)
                         <option value="{{ $sleeve }}">{{ $sleeve }}</option>
                       @endforeach
                     </select>
+                  </div>
+                </div>
+
+                <div class="control-group" style="width: 445px;">
+                  <label class="control-label">Pattern</label>
+                  <div class="controls">
+                    <select name="pattern">
+                      <option value="">Select Pattern</option>
+                      @foreach($patternArray as $pattern)
+                        <option value="{{ $pattern }}">{{ $pattern }}</option>
+                      @endforeach
+                    </select>  
                   </div>
                 </div>
 
@@ -96,6 +108,13 @@
                     <div class="controls">
                       <input type="text" name="price" id="price">
                     </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Product Weight (g)</label>
+                  <div class="controls">
+                    <input type="text" name="product_weight" id="product_weight">
+                  </div>
                 </div>
 
                 <div class="control-group">

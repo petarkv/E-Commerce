@@ -92,11 +92,31 @@
                   </div>
                 </div>
 
+                <div class="control-group" style="width: 445px;">
+                  <label class="control-label">Pattern</label>
+                  <div class="controls">
+                    <select name="pattern" class="form-control">
+                      <option value="">Select Pattern</option>
+                        @foreach ($patternArray as $pattern)
+                          <option value="{{ $pattern }}" @if(!empty($productDetails->pattern) &&
+                            $productDetails->pattern == $pattern) selected @endif>{{ $pattern }}</option>
+                        @endforeach
+                    </select>
+                  </div>
+                </div>
+
                 <div class="control-group">
                     <label class="control-label">Price</label>
                     <div class="controls">
                       <input type="text" name="price" id="price" value="{{ $productDetails->price }}">
                     </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Product Weight (g)</label>
+                  <div class="controls">
+                    <input type="text" name="product_weight" id="product_weight" value="{{ $productDetails->weight }}">
+                  </div>
                 </div>
 
                 <div class="control-group">

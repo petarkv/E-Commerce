@@ -90,6 +90,7 @@ function resetMenu() {
 <script src="{{ asset('js/template_js/jquery.validate.js') }}"></script> 
 <script src="{{ asset('js/template_js/matrix.js') }}"></script> 
 <script src="{{ asset('js/template_js/matrix.form_validation.js') }}"></script>
+<!--script src="{{ asset('js/app.js') }}"></script-->
 
 <!-- Pop Up Window -->
 <script src="{{ asset('js/template_js/matrix.popover.js') }}"></script>

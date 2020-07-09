@@ -8,8 +8,9 @@
                 @include('layouts.frontLayout.front_sidebar')
             </div>            
             <div class="col-sm-9 padding-right">
-                <div class="features_items"><!--features_items-->
-					<h2 class="title text-center">Post Data</h2>
+                <div class="features_items" id="app"><!--features_items-->
+					<h2 class="title text-center">@{{ testmsg }}</h2> 
+					<h2 class="title text-center">@{{ responsemsg }}</h2>
 					
 					@if (Session::has('flash_message_success'))                
             			<div class="alert alert-success alert-block">
@@ -31,22 +32,23 @@
                     <div class="contact-form">
 	    				<!--h2 class="title text-center">Get In Touch</h2-->
 	    				<div class="status alert alert-success" style="display: none"></div>
-                        <form action="{{ url('/page/post') }}" id="post-data-form" class="contact-form row" 
-                                name="post-data-form" method="post">{{ csrf_field() }}
+                        <form id="post-data-form" class="contact-form row" 
+                                name="post-data-form" method="post" v-on:submit.prevent="addPost">{{ csrf_field() }}
 				            <div class="form-group col-md-6">
-				                <input type="text" name="name" class="form-control" placeholder="Name">
+				                <input type="text" v-model="name" class="form-control" placeholder="Name" required="">
 				            </div>
 				            <div class="form-group col-md-6">
-				                <input type="email" name="email" class="form-control" placeholder="Email">
+				                <input type="email" v-model="email" class="form-control" placeholder="Email" required="">
 				            </div>
 				            <div class="form-group col-md-12">
-				                <input type="text" name="subject" class="form-control" placeholder="Subject">
+				                <input type="text" v-model="subject" class="form-control" placeholder="Subject" required="">
 				            </div>
 				            <div class="form-group col-md-12">
-				                <textarea name="message" id="message" class="form-control" rows="8" placeholder="Your Message Here"></textarea>
+								<textarea v-model="message" id="message" class="form-control" rows="8" 
+								placeholder="Your Message Here" required=""></textarea>
 				            </div>                        
 				            <div class="form-group col-md-12">
-				                <input type="submit" name="submit" class="btn btn-primary pull-right" value="Submit">
+				                <button type="submit" class="btn btn-primary pull-right" value="Submit">Submit</button>
 				            </div>
 				        </form>
 	    			</div>
