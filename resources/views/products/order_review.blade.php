@@ -111,7 +111,9 @@
                             <p>Size: {{ $cart->size }}</p>
                         </td>
                         <td class="cart_price">                            
-                            <p>EUR {{ $cart->price }}</p>
+                            {{-- <p>EUR {{ $cart->price }}</p> --}}
+                            <?php $product_price = Product::getProductPrice($cart->product_id,$cart->size); ?>                          
+                            <p>EUR {{ $product_price }}</p>
                         </td>
                         <td class="cart_quantity">
                             <div class="cart_quantity_button">
@@ -119,10 +121,12 @@
                             </div>
                         </td>
                         <td class="cart_total">
-                            <p class="cart_total_price">EUR {{ $cart->price*$cart->quantity }}</p>
+                            {{-- <p class="cart_total_price">EUR {{ $cart->price*$cart->quantity }}</p> --}}
+                            <p class="cart_total_price">EUR {{ $product_price*$cart->quantity }}</p>
                         </td>                        
                     </tr>
-                    <?php $total_amount = $total_amount + ($cart->price*$cart->quantity); ?>
+                    <!--?php $total_amount = $total_amount + ($cart->price*$cart->quantity); ?-->
+                    <?php $total_amount = $total_amount + ($product_price*$cart->quantity); ?>
                     @endforeach
                     <tr>
                         <td colspan="4">&nbsp;</td>
