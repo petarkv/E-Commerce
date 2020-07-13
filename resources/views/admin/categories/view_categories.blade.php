@@ -52,10 +52,14 @@
                         <td>{{ $category->parent_id }}</td>
                         <td>{{ $category->url }}</td>
                         <td class="center">
+                          @if(Session::get('adminDetails')['categories_edit_access']==1)
                           <a href="{{ url('/admin/edit-category/'.$category->id) }}" 
-                            class="btn btn-primary btn-mini">Edit</a>                                             
+                            class="btn btn-primary btn-mini">Edit</a>
+                          @endif
+                          @if(Session::get('adminDetails')['categories_full_access']==1)                                             
                           <a rel="{{ $category->id }}" rel1="delete-category" href="javascript:" 
                             class="btn btn-danger btn-mini deleteRecord">Delete</a></td>
+                          @endif
                       </tr>     
                     @endforeach
                                             

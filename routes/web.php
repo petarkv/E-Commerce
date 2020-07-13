@@ -230,6 +230,15 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #ADMIN USERS ROUTE
     Route::get('/admin/view-users', 'UsersController@viewUsers');
 
+    #ADMIN/SUB-ADMIN ADD ROUTE
+    Route::match(['get','post'],'/admin/add-admin','AdminController@addAdmin');
+
+    #ADMIN/SUB-ADMIN EDIT ROUTE
+    Route::match(['get','post'],'/admin/edit-admin/{id}','AdminController@editAdmin');
+
+    #ADMIN/SUB-ADMINS VIEW ROUTE
+    Route::get('/admin/view-admins', 'AdminController@viewAdmins');
+
     #ADD CMS PAGE ADMIN PANEL
     Route::match(['get','post'],'/admin/add-cms-page','CmsController@addCmsPage');
     #VIEW CMS PAGES ADMIN PANEL

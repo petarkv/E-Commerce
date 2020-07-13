@@ -4,15 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use Session;
 
 class CategoryController extends Controller
 {
     public function getAddCategory(){
+        if(Session::get('adminDetails')['categories_edit_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+
         $levels = Category::where(['parent_id'=>0])->get();
         return \view('admin.categories.add_category')->with(compact('levels'));
     }
 
     public function postAddCategory(Request $request){
+        if(Session::get('adminDetails')['categories_edit_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+
         if ($request->isMethod('post')) {
             $data = $request->all();
             //echo "<pre>"; \print_r($data); die;
@@ -50,17 +61,32 @@ class CategoryController extends Controller
     }
 
     public function getViewCategories(){
+        if(Session::get('adminDetails')['categories_view_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+
         $categories = Category::get();
         return \view('admin.categories.view_categories')->with(\compact('categories'));
     }
 
-    public function getEditCategory($id=null){         
+    public function getEditCategory($id=null){ 
+        if(Session::get('adminDetails')['categories_edit_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+        
         $categoryDetails = Category::where(['id'=>$id])->first();
         $levels = Category::where(['parent_id'=>0])->get();
         return \view('admin.categories.edit_category')->with(compact('categoryDetails', 'levels'));
     }
 
     public function postEditCategory(Request $request, $id=null){ 
+        if(Session::get('adminDetails')['categories_edit_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+
         if ($request->isMethod('post')) {
             $data = $request->all();
             //echo "<pre>"; print_r($data); die;
@@ -94,6 +120,11 @@ class CategoryController extends Controller
     }
 
     public function deleteCategory($id = null){
+        if(Session::get('adminDetails')['categories_full_access']==0){
+            return \redirect('/admin/dashboard')->with('flash_message_error',
+               'You have no access for this module!');
+        }
+
         //echo $id; die;
         if (!empty($id)) {
             Category::where(['id'=>$id])->delete();

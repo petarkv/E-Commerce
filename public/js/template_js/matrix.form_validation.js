@@ -1,6 +1,17 @@
 
 $(document).ready(function(){
 
+	// Admin Type
+	$("#type").change(function(){
+		var type = $("#type").val();
+		// alert(type);
+		if (type == "Admin") {
+			$("#access").hide();
+		}else{
+			$("#access").show();
+		}
+	})
+
 	//alert("test");
 	//$("#new_pwd").click(function(){
 	$("#current_pwd").keyup(function(){

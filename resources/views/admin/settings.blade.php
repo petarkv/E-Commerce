@@ -36,8 +36,7 @@
                     
                     <label class="control-label">Username</label>
                     <div class="controls">
-                      <input type="text" value="{{ $adminDetails->username }}" readonly />
-                      <span id="checkPass"></span>
+                      <input type="text" value="{{ $adminDetails->username }}" readonly />                      
                     </div>
 
                     <label class="control-label">Current Password</label>
