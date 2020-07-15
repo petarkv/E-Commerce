@@ -23,6 +23,8 @@ use App\Country;
 use App\DeliveryAddress;
 use App\Order;
 use App\OrdersProduct;
+use App\Exports\productsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
@@ -1354,5 +1356,9 @@ class ProductController extends Controller
                 echo "This Postal Code is not available for delivery";
             }
         }
+    }
+
+    public function exportProducts(){
+        return Excel::download(new productsExport,'products.xlsx');
     }
 }

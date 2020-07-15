@@ -267,4 +267,10 @@ Route::group(['middleware' => ['adminlogin']], function(){
     Route::get('/admin/view-shipping','ShippingController@viewShipping');
     #EDIT(UPDATE) SHIPPING CHARGES
     Route::match(['get','post'],'/admin/edit-shipping/{id}','ShippingController@editShipping');
+
+    #EXPORT USERS IN EXCEL FILE
+    Route::get('/admin/export-users','UsersController@exportUsers');
+
+    #EXPORT PRODUCTS IN EXCEL FILE
+    Route::get('/admin/export-products','ProductController@exportProducts');
 });

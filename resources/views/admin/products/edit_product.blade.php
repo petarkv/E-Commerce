@@ -68,14 +68,14 @@
                 <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
-                      <textarea name="description" id="description">{{ $productDetails->description }}</textarea>
+                      <textarea name="description" id="description" class="textarea_editor span8">{{ $productDetails->description }}</textarea>
                     </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Material & Care</label>
                   <div class="controls">
-                    <textarea name="care" id="care">{{ $productDetails->care }}</textarea>
+                    <textarea name="care" id="care" class="textarea_care span8">{{ $productDetails->care }}</textarea>
                   </div>
                 </div>
 

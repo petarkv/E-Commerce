@@ -39,11 +39,11 @@
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label">Description</label>
+                  <label class="control-label">Description</label>
                     <div class="controls">
-                      <textarea name="description" id="description"></textarea>
+                      <textarea name="description" id="description" class="textarea_editor span8"></textarea>
                     </div>
-                  </div>
+                </div>
 
                 <div class="control-group">
                   <label class="control-label">URL</label>

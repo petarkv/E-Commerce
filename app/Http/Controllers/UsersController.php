@@ -10,6 +10,8 @@ use App\User;
 use App\Country;
 use Auth;
 use Session;
+use App\Exports\usersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UsersController extends Controller
 {
@@ -284,6 +286,10 @@ class UsersController extends Controller
 
         $users = User::get();
         return \view('admin.users.view_users')->with(\compact('users'));
+    }
+
+    public function exportUsers(){
+        return Excel::download(new usersExport, 'users.xlsx');
     }
 
 }

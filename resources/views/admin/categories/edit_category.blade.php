@@ -43,7 +43,7 @@
                 <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
-                      <textarea name="description" id="description">{{ $categoryDetails->description }}</textarea>
+                      <textarea name="description" id="description" class="textarea_editor span8">{{ $categoryDetails->description }}</textarea>
                     </div>
                   </div>
 

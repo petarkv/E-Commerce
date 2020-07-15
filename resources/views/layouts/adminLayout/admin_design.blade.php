@@ -23,6 +23,9 @@
 <!-- Date Picker -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+<!-- WysiHTML5 -->
+<link rel="stylesheet" href="{{ asset('css/template_css/bootstrap-wysihtml5.css') }}" />
+
 </head>
 <body>
 
@@ -98,6 +101,14 @@ function resetMenu() {
 <!-- Table -->
 <script src="{{ asset('js/template_js/jquery.dataTables.min.js') }}"></script> 
 <script src="{{ asset('js/template_js/matrix.tables.js') }}"></script>
+
+<!-- WysiHTML5 -->
+<script src="{{ asset('js/template_js/wysihtml5-0.3.0.js') }}"></script>
+<script src="{{ asset('js/template_js/bootstrap-wysihtml5.js') }}"></script>
+<script>
+  $('.textarea_editor').wysihtml5();
+  $('.textarea_care').wysihtml5();
+</script>
 
 <!-- Sweet Alert -->
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script--> 

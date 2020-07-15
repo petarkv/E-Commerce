@@ -26,7 +26,9 @@ class Adminlogin
             $adminDetails = \json_decode(json_encode($adminDetails),true);
             Session::put('adminDetails',$adminDetails);
             if($adminDetails['type']=="Admin"){
-                $adminDetails['categories_access'] = 1;
+                $adminDetails['categories_full_access'] = 1;
+                $adminDetails['categories_edit_access'] = 1;
+                $adminDetails['categories_view_access'] = 1;
                 $adminDetails['products_access'] = 1;
                 $adminDetails['orders_access'] = 1;
                 $adminDetails['users_access'] = 1;
