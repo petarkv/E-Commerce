@@ -23,6 +23,10 @@
     @endif
 
     </div>
+    <div style="margin-left:20px;">
+      <a href="{{ url('/admin/export-products') }}" class="btn btn-primary btn-mini">Export Products</a>
+      {{-- <p>Export Users in Excel file (.xlsx)</p> --}}
+    </div>
     <div class="container-fluid">
       <hr>
       <div class="row-fluid">
