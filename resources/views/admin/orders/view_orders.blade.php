@@ -65,9 +65,14 @@
                         <td>{{ $order->payment_method }}</td>                                                 
                         <td class="center">
                             <a target="_blank" href="{{ url('/admin/view-order/'.$order->id) }}" class="btn btn-info btn-mini" 
-                                      title="View Order Details">View Order Details</a><br><br>
+                                      title="View Order Details" style="width: 100px;">View Order Details</a><br>
+                            @if($order->order_status == "Shipped" || $order->order_status == "Delivered" ||
+                                $order->order_status == "Paid")
                             <a target="_blank" href="{{ url('/admin/view-order-invoice/'.$order->id) }}" class="btn btn-success btn-mini" 
-                                      title="View Order Invoice">View Order Invoice</a>
+                                      title="View Order Invoice" style="width: 100px;">View Order Invoice</a><br>
+                            <a target="_blank" href="{{ url('/admin/view-pdf-invoice/'.$order->id) }}" class="btn btn-warning btn-mini" 
+                                      title="View PDF Invoice" style="width: 100px;">View PDF Invoice</a>
+                            @endif
                         </td>                           
                     </tr>                   
                     @endforeach

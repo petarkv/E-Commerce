@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-xs-12">
     		<div class="invoice-title">
-    			<h2>ECommerce Invoice</h2><h3 class="pull-right">Order # {{ $orderDetails->id }}</h3>
+    			<h2>MyShop Invoice</h2><h3 class="pull-right">Order # {{ $orderDetails->id }}</h3>
     		</div>
     		<hr>
     		<div class="row">
