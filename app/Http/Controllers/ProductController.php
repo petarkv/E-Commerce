@@ -24,8 +24,10 @@ use App\DeliveryAddress;
 use App\Order;
 use App\OrdersProduct;
 use App\Exports\productsExport;
+use App\Exports\ordersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Dompdf\Dompdf;
+use Carbon\Carbon;
 
 
 class ProductController extends Controller
@@ -746,69 +748,124 @@ class ProductController extends Controller
         Session::forget('couponCode');
 
         $data = $request->all();
-        //echo "<pre>"; print_r($data); die;
+        // echo "<pre>"; print_r($data); die;
 
-        
+        if(!empty($data['wishListButton']) && $data['wishListButton']=="Add to Wish List"){        
+            // echo "Wish List is selected"; die;
 
-        if (empty(Auth::user()->email)) {
-            $data['user_email'] = '';
-        }else{
-            $data['user_email'] = Auth::user()->email;
-        }
-
-        /*if (empty($data['session_id'])) {
-            $data['session_id'] = '';
-        }*/
-
-        $session_id = Session::get('session_id');
-        if(empty($session_id)){
-            $session_id = Str::random(40);
-        Session::put('session_id',$session_id);
-        }
-
-        $sizeArr = explode("-",$data['size']);
-        $priceArr = explode("-",$data['price']);
-        if(empty($sizeArr[1])){
-            return \redirect()->back()->with('flash_message_error','You need to select Product size first!');
-        }else{
-            // Check Product Stock is available or not
-            $product_size = explode("-",$data['size']);
-            //echo $product_size[1]; die;
-            $getProductStock = ProductsAttribute::where(['product_id'=>$data['product_id'],
-                            'size'=>$product_size[1]])->first();
-            //echo $getProductStock->stock; die;
-
-            if ($getProductStock->stock < $data['quantity']) {
-                return \redirect()->back()->with('flash_message_error','Required Quantity is not available!');
+            // Check User is logged in
+            if (!Auth::check()) {
+                return redirect()->back()->with('flash_message_error','Please login to add product
+                    in Your Wish List');
+            }
+            // Check Size is selected
+            if(empty($data['size'])){
+                return redirect()->back()->with('flash_message_error','Please select size to add product
+                    in Your Wish List'); 
             }
 
-            $countProducts = DB::table('cart')->where(['product_id'=>$data['product_id'],        
-                                                    'product_color'=>$data['product_color'],        
-                                                    'size'=>$sizeArr[1],      
-                                                    'session_id'=>$session_id])->count();
+            // Get Product Size
+            $sizeArr = explode("-",$data['size']);
+            $product_size = $sizeArr[1];
 
-        //echo $countProducts; die;
-        if ($countProducts>0) {
-            return \redirect()->back()->with('flash_message_error','Product already exists in Cart!');
+            // Get Product Price
+            $proPrice = ProductsAttribute::where(['product_id'=>$data['product_id'],'size'=>$product_size])->first();
+            $product_price = $proPrice->price;
+
+            // Get User Email/Username
+            $user_email = Auth::user()->email;
+
+            // Set Quantity as 1
+            $quantity = 1;
+
+            // Get Current Date
+            $created_at = Carbon::now();
+
+
+            $wishListCount = DB::table('wish_list')->where(['user_email'=>$user_email,'product_id'=>$data['product_id'],
+            'product_color'=>$data['product_color'],'size'=>$product_size])->count();
+
+            if($wishListCount>0){
+                return redirect()->back()->with('flash_message_error','Product already exists in Wish List!');
+            }else{
+
+            // Insert Product in Wish List
+            DB::table('wish_list')->insert(['product_id'=>$data['product_id'],'product_name'=>$data['product_name'],
+            'product_code'=>$data['product_code'],'product_color'=>$data['product_color'],'price'=>$product_price,
+            'size'=>$product_size,'quantity'=>$quantity,'user_email'=>$user_email,'created_at'=>$created_at]);
+                return redirect()->back()->with('flash_message_success','Product has been added in Wish List');
+
+            }
+
         }else{
+            // echo "Add to Cart is selected"; die;
 
-            $getSKU = ProductsAttribute::select('sku')->where(['product_id'=>$data['product_id'],
-            'size'=>$sizeArr[1]])->first();
-        }       
+            // If Product added from Wish List
+            if(!empty($data['cartButton']) && $data['cartButton']=="Add to Cart"){                
+                $data['quantity'] = 1;
+            }
 
-
-
-        DB::table('cart')->insert(['product_id'=>$data['product_id'],
-                                    'product_name'=>$data['product_name'],
-                                    'product_code'=>$getSKU->sku,
-                                    'product_color'=>$data['product_color'],
-                                    'price'=>$priceArr[0],
-                                    'size'=>$sizeArr[1],
-                                    'quantity'=>$data['quantity'],
-                                    'user_email'=>$data['user_email'],
-                                    'session_id'=>$session_id]);
+            if (empty(Auth::user()->email)) {
+                $data['user_email'] = '';
+            }else{
+                $data['user_email'] = Auth::user()->email;
+            }
+    
+            /*if (empty($data['session_id'])) {
+                $data['session_id'] = '';
+            }*/
+    
+            $session_id = Session::get('session_id');
+            if(empty($session_id)){
+                $session_id = Str::random(40);
+            Session::put('session_id',$session_id);
+            }
+    
+            $sizeArr = explode("-",$data['size']);
+            $priceArr = explode("-",$data['price']);
+            if(empty($sizeArr[1])){
+                return \redirect()->back()->with('flash_message_error','You need to select Product size first!');
+            }else{
+                // Check Product Stock is available or not
+                $product_size = explode("-",$data['size']);
+                // echo $product_size[1]; die;
+                // echo $data['product_id']; die;
+                $getProductStock = ProductsAttribute::where(['product_id'=>$data['product_id'],
+                                'size'=>$product_size[1]])->first();
+                // echo $getProductStock->stock; die;
+    
+                if ($getProductStock->stock < $data['quantity']) {
+                    return \redirect()->back()->with('flash_message_error','Required Quantity is not available!');
+                }
+    
+                $countProducts = DB::table('cart')->where(['product_id'=>$data['product_id'],        
+                                                        'product_color'=>$data['product_color'],        
+                                                        'size'=>$sizeArr[1],      
+                                                        'session_id'=>$session_id])->count();
+    
+            //echo $countProducts; die;
+            if ($countProducts>0) {
+                return \redirect()->back()->with('flash_message_error','Product already exists in Cart!');
+            }else{
+    
+                $getSKU = ProductsAttribute::select('sku')->where(['product_id'=>$data['product_id'],
+                'size'=>$sizeArr[1]])->first();
+            }       
+    
+            // echo $getSKU['sku']; die;
+    
+            DB::table('cart')->insert(['product_id'=>$data['product_id'],
+                                        'product_name'=>$data['product_name'],
+                                        'product_code'=>$getSKU->sku,
+                                        'product_color'=>$data['product_color'],
+                                        'price'=>$priceArr[0],
+                                        'size'=>$sizeArr[1],
+                                        'quantity'=>$data['quantity'],
+                                        'user_email'=>$data['user_email'],
+                                        'session_id'=>$session_id]);
+            }
+            return \redirect('cart')->with('flash_message_success','Product has been added in Cart!'); 
         }
-        return \redirect('cart')->with('flash_message_success','Product has been added in Cart!'); 
     }
 
     public function cart(){
@@ -830,6 +887,23 @@ class ProductController extends Controller
         $meta_description = "View Shopping Cart of MyShop Website";
         $meta_keywords = "shopping cart, ecommerce website, myshop website";
         return \view('products.cart')->with(\compact('userCart','meta_title','meta_description','meta_keywords'));
+    }
+
+    public function wishList(){
+        if(Auth::check()){
+        $user_email = Auth::user()->email;
+        $userWishList = DB::table('wish_list')->where('user_email',$user_email)->get();
+        foreach($userWishList as $key => $product){
+            $productDetails = Product::where('id',$product->product_id)->first();
+            $userWishList[$key]->image = $productDetails->image;
+            }
+        }else{
+            $userWishList = array();
+        }
+        $meta_title = "Wish List - MyShop";
+        $meta_description = "View Wish List of MyShop Website";
+        $meta_keywords = "wish list, ecommerce website, myshop website";
+        return \view('products.wish_list')->with(\compact('userWishList','meta_title','meta_description','meta_keywords'));
     }
 
     public function deleteCartProduct($id=null){
@@ -1190,7 +1264,7 @@ class ProductController extends Controller
                 ];
                 Mail::send('emails.order',$messageData,function($message) use($email){
                     $message->to($email)->subject('Order Placed - MyShop');
-                    $message->from('mile.javakv@gmail.com','MyShop');
+                    $message->from('myshopbre@gmail.com','MyShop');
                 });
                 /* Code for Order Email End */
 
@@ -1543,6 +1617,48 @@ class ProductController extends Controller
         return \view('orders.cancel_paypal');
     }
 
+    public function ipnPaypal(Request $request){
+        $data = $request->all();
+        if($data['payment_status']=="Completed"){
+            // We will send email to user/admin
+            // Update Order status to Payment Captured
+
+            // Get Order ID
+            $order_id = Session::get('order_id');
+
+            // Update Order
+            Order::where('id',$order_id)->update(['order_status'=>'Payment Captured']);
+
+            $productDetails = Order::with('orders')->where('id',$order_id)->first();
+            $productDetails = json_decode(json_encode($productDetails),true);
+            /*echo "<pre>"; print_r($productDetails);*/ /*die;*/
+
+            $user_id = $productDetails['user_id'];
+            $user_email = $productDetails['user_email'];
+            $name = $productDetails['name'];
+
+            $userDetails = User::where('id',$user_id)->first();
+            $userDetails = json_decode(json_encode($userDetails),true);
+            /*echo "<pre>"; print_r($userDetails); die;*/
+            /* Code for Order Email Start */
+            $email = $user_email;
+            $messageData = [
+                'email' => $email,
+                'name' => $name,
+                'order_id' => $order_id,
+                'productDetails' => $productDetails,
+                'userDetails' => $userDetails
+            ];
+            Mail::send('emails.order',$messageData,function($message) use($email){
+                $message->to($email)->subject('Order Placed - MyShop Website');    
+            });
+            /* Code for Order Email Ends */
+
+            // Empty Cart
+            DB::table('cart')->where('user_email',$user_email)->delete();
+        }
+    }
+
     public function searchProducts(Request $request){
         if($request->isMethod('post')){
             $data = $request->all(); 
@@ -1586,5 +1702,27 @@ class ProductController extends Controller
 
     public function exportProducts(){
         return Excel::download(new productsExport,'products.xlsx');
+    }
+
+    public function deleteWishListProduct($id){
+        DB::table('wish_list')->where('id',$id)->delete();
+        return \redirect()->back()->with('flash_message_success','Product has been deleted from Wish List!'); 
+    }
+
+    public function exportOrders(){
+        return Excel::download(new ordersExport, 'orders.xlsx');
+    }
+
+    public function viewOrdersCharts(){
+        $current_month_orders = Order::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)->count();
+        $last_month_orders = Order::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(1))->count();
+        $before_2_month_orders = Order::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(2))->count();
+        $before_3_month_orders = Order::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(3))->count();
+        return \view('admin.products.view_orders_charts')->with(\compact('current_month_orders','last_month_orders',
+        'before_2_month_orders','before_3_month_orders'));
     }
 }

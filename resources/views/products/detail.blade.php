@@ -11,6 +11,13 @@
                 <strong>{!! session('flash_message_error') !!}</strong>                
             </div>
         @endif
+
+        @if (Session::has('flash_message_success'))                
+            <div class="alert alert-success alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>                
+                <strong>{!! session('flash_message_success') !!}</strong>                
+            </div>
+        @endif
         
             <div class="col-sm-3">
                 @include('layouts.frontLayout.front_sidebar')
@@ -28,7 +35,7 @@
                             <!--h3>ZOOM</h3-->
                             </div>
                         </div>
-                        <div id="similar-product" class="carousel slide" data-ride="carousel"  style="margin-top: 255px;">
+                        <div id="similar-product" class="carousel slide" data-ride="carousel"  style="margin-top: 295px;">
                             
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner">
@@ -96,12 +103,17 @@
                                 <label>Quantity:</label>
                                 <input type="text" name="quantity" value="1" />
                                 @if($total_stock>0)
-                                <button type="submit" class="btn btn-fefault cart" id="cartButton">
+                                <button type="submit" class="btn btn-fefault cart" id="cartButton" name="cartButton" value="Add to Cart">
                                     <i class="fa fa-shopping-cart"></i>
-                                    Add to cart
+                                    Add to Cart
                                 </button>
-                                @endif
+                                @endif                                
                             </span>
+                            <button type="submit" class="btn btn-fefault cart" id="wishListButton" name="wishListButton" 
+                            value="Add to Wish List" style="margin-left: 2px;">
+                                <i class="fa fa-star"></i>
+                                Add to Wish List
+                            </button>
                             <p><b>Availability:</b><span id="Availability">@if($total_stock>0) In Stock @else Out of Stock @endif</p></span>
                             <p><b>Condition:</b> New</p>
                             <p><b>Delivery: </b>
