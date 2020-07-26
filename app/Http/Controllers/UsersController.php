@@ -12,6 +12,8 @@ use Auth;
 use Session;
 use App\Exports\usersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+use DB;
 
 class UsersController extends Controller
 {
@@ -73,7 +75,7 @@ class UsersController extends Controller
                 $messageData = ['email'=>$data['email'],'name'=>$data['name'],'surname'=>$data['surname']];
                 Mail::send('emails.register',$messageData,function($message) use($email){
                     $message->to($email)->subject('Registration with ECommerce');
-                    $message->from('mile.javakv@gmail.com','ECommerce');
+                    $message->from('myshopbre@gmail.com','ECommerce');
                 });*/
 
                 // Send Confirmation Email
@@ -82,7 +84,7 @@ class UsersController extends Controller
                                 'code'=>base64_encode($data['email'])];
                 Mail::send('emails.confirmation',$messageData,function($message) use($email){
                     $message->to($email)->subject('Confirm Your MyShop Account');
-                    $message->from('mile.javakv@gmail.com','MyShop');
+                    $message->from('myshopbre@gmail.com','MyShop');
                 });
 
                 return \redirect()->back()->with('flash_message_success','Please confirm your email to
@@ -127,7 +129,7 @@ class UsersController extends Controller
             ];
             Mail::send('emails.forgotpassword',$messageData,function($message)use($email){
                 $message->to($email)->subject('New Password - MyShop');
-                $message->from('mile.javakv@gmail.com','MyShop');
+                $message->from('myshopbre@gmail.com','MyShop');
             });
             return \redirect('/login-register')->with('flash_message_success','Please check Your email
                 for new password.');
@@ -150,7 +152,7 @@ class UsersController extends Controller
                 $messageData = ['email'=>$email,'name'=>$userDetails->name,'surname'=>$userDetails->surname];
                 Mail::send('emails.welcome',$messageData,function($message) use($email){
                     $message->to($email)->subject('Welcome to MyShop');
-                    $message->from('mile.javakv@gmail.com','MyShop');
+                    $message->from('myshopbre@gmail.com','MyShop');
                 });
 
                 return \redirect('/login-register')->with('flash_message_success','Your email account is 
@@ -290,6 +292,27 @@ class UsersController extends Controller
 
     public function exportUsers(){
         return Excel::download(new usersExport, 'users.xlsx');
+    }
+
+    public function viewUsersCharts(){
+        $current_month_users = User::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)->count();
+        $last_month_users = User::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(1))->count();
+        $before_2_month_users = User::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(2))->count();
+        $before_3_month_users = User::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->subMonth(3))->count();
+        return \view('admin.users.view_users_charts')->with(\compact('current_month_users','last_month_users',
+                    'before_2_month_users','before_3_month_users'));
+    }
+
+    public function viewUsersCountriesCharts(){
+        $getUsersCountries = User::select('country',DB::raw('count(country) as count'))->groupBy('country')->get();
+        $getUsersCountries = \json_decode(\json_encode($getUsersCountries),true);
+        $numberCountries = count($getUsersCountries);
+        // echo "<pre>"; print_r($getUsersCountries); die;
+        return \view('admin.users.view_users_countries_charts')->with(\compact('getUsersCountries','numberCountries'));
     }
 
 }

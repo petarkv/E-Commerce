@@ -143,6 +143,14 @@ Route::group(['middleware'=>['frontlogin']],function(){
     Route::get('/paypal/thanks', 'ProductController@thanksPaypal');
     # PAYPAL CANCEL PAGE
     Route::get('/paypal/cancel', 'ProductController@cancelPaypal');
+
+    #PAYPAL IPN
+    Route::post('/paypal/ipn','ProductsController@ipnPaypal');
+
+    #WISH LIST
+    Route::match(['get','post'],'/wish-list','ProductController@wishList');    
+    #DELETE PRODUCT FROM WISH LIST
+    Route::get('/wish-list/delete-product/{id}', 'ProductController@deleteWishListProduct');
 });
 
 
@@ -218,6 +226,9 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #ADMIN ORDERS
     Route::get('/admin/view-orders', 'ProductController@viewOrders');
 
+    #ADMIN ORDERS CHARTS
+    Route::get('/admin/view-charts-orders', 'ProductController@viewOrdersCharts');
+
     #ADMIN ORDER DETAILS
     Route::get('/admin/view-order/{id}', 'ProductController@viewOrderDetails');
 
@@ -230,8 +241,14 @@ Route::group(['middleware' => ['adminlogin']], function(){
     #UPDATE ORDER STATUS
     Route::post('/admin/update-order-status', 'ProductController@updateOrderStatus');
 
-    #ADMIN USERS ROUTE
+    #ADMIN USERS ROUTE VIEW USERS
     Route::get('/admin/view-users', 'UsersController@viewUsers');
+
+    #ADMIN USERS ROUTE USERS CHARTS
+    Route::get('/admin/view-charts-users-countries', 'UsersController@viewUsersCountriesCharts');
+
+    #ADMIN USERS COUNTRIES CHARTS
+    Route::get('/admin/view-charts-users', 'UsersController@viewUsersCharts');
 
     #ADMIN/SUB-ADMIN ADD ROUTE
     Route::match(['get','post'],'/admin/add-admin','AdminController@addAdmin');
@@ -276,4 +293,7 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
     #EXPORT PRODUCTS IN EXCEL FILE
     Route::get('/admin/export-products','ProductController@exportProducts');
+
+    #EXPORT ORDERS IN EXCEL FILE
+    Route::get('/admin/export-orders','ProductController@exportOrders');
 });

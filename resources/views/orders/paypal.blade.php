@@ -32,7 +32,7 @@
                 <input type="hidden" name="cmd" value="_xclick">
                            
                 <!-- Saved buttons are identified by their button IDs -->               
-                <input type="hidden" name="business" value="sb-g47bce1957808@business.example.com">
+                <input type="hidden" name="business" value="mile.javakv@gmail.com">
                 <input type="hidden" name="item_name" value="{{ Session::get('order_id') }}"> 
                 <input type="hidden" name="currency_code" value="EUR">
                 <input type="hidden" name="amount" value="{{ round(Session::get('grand_total'),2) }}">
@@ -48,6 +48,7 @@
                 <input type="hidden" name="country" value="{{ $getCountryCode->country_code }}">
                 <input type="hidden" name="return" value="{{ url('/paypal/thanks') }}">                             
                 <input type="hidden" name="cancel_return" value="{{ url('/paypal/cancel') }}"> 
+                <input type="hidden" name="notify_url" value="{{ url('/paypal/ipn') }}"> 
 
                 <!--Saved buttons display an appropriate button image. -->
                 <input type="image"
